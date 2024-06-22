@@ -22,7 +22,6 @@ String str_time;
 String str_date;
 String months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 String week_days[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-bool paste_enable = true;
 
 //func of interprerating int to string
 String Interpretate(int val, bool time_format=false);
@@ -55,7 +54,7 @@ void setup() {
     timeClient.setTimeOffset(10800);
 }
 void loop() {
-    enum avenger {mo_day = 0, mo_night, ye_day, ye_night} avenger_type;
+    enum avengeres {mo_day = 0, mo_night, ye_day, ye_night};
     byte avenger_temp[] = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 
     timeClient.update();
@@ -68,15 +67,7 @@ void loop() {
     server.handleClient();
 
     if (!ptm->tm_sec && !ptm->tm_min) {
-        int hours = ptm->tm_hours;
-        if ((hours < 8) || (hours > 19)) {
-	    avenger_type = ye_night;
-	    if (hours > 19) {hours = hours - 11;}
-	} else if (hours > 7 && hours < 20) {
-            avenger_type = ye_day;
-            hours = hours - 8;
-        } 
-        PasteAvValue(avenger_temp, avenger_type, hour, byte(bme.readTemperature()));
+        if (ptm->tm_)
     }
 }
 
