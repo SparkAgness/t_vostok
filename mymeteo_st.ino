@@ -33,6 +33,10 @@ void PasteAvValue(byte* begin, int pastes_row, int paste_place, int vals_time)
     *(begin + begin*pastes_row + paste_place) = vals_time;
 };
 
+
+byte AverageCalc(byte* arr_source);
+int AvrPasteCounter(byte* arr);
+
 void setup() {
     Serial.begin(115200);
     WiFi.begin(ssid, password);
@@ -67,7 +71,7 @@ void loop() {
     str_press = Interpretate(int(bme.readPressure())/133);
     server.handleClient();
 
-    if (!ptm->tm_sec && !ptm->tm_min) {
+    if (paste_enable && !ptm->tm_min && !ptm->tm_sec) {
         int hours = ptm->tm_hours;
         if ((hours < 8) || (hours > 19)) {
 	    avenger_type = ye_night;
@@ -77,7 +81,9 @@ void loop() {
             hours = hours - 8;
         } 
         PasteAvValue(avenger_temp, avenger_type, hour, byte(bme.readTemperature()));
+        paste_enable = false;
     }
+    if (!paste_enable && ptm->tm_min) {paste_enable = true;}
 }
 
 void handle_OnConnect() {
@@ -137,4 +143,26 @@ String Interpretate(int val, bool time_format)
         return value = String(dec) + String(ones);
     }
     return value = String(hundreds) + String(dec) + String(ones);
+}
+
+int AvrPasteCounter(byte* arr)
+{
+    int size = 12, count;
+    for (count = 0, count < size, ++count) {
+        if (!(*(arr + count))) {return count;}
+        return -1;
+    }
+};
+
+byte AverageCalc(byte* arr_source)
+{
+    int count = AvrPasteCounter(arr_source);
+    byte sum = 0;
+    if (count) {
+        for (int i = 0; i < count; ++i) {
+            sum += *(arr_source + i);
+        }
+        sum /= byte(count);
+    }
+    return sum;
 }
