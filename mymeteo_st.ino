@@ -28,14 +28,14 @@ bool paste_enable = true;
 String Interpretate(int val, bool time_format=false);
 
 //average values adding
-void PasteAvValue(byte* begin, int pastes_row, int paste_place, int vals_time)
+void PasteAvValue(int begin[4][12], int pastes_row, int paste_place, int vals_time)
 {
-    *(begin + begin*pastes_row + paste_place) = vals_time;
+    begin[pastes_row][paste_place] = vals_time;
 };
 
 
-byte AverageCalc(byte* arr_source);
-int AvrPasteCounter(byte* arr);
+int AverageCalc(int* arr_source);
+int AvrPasteCounter(int* arr);
 
 void setup() {
     Serial.begin(115200);
@@ -60,7 +60,7 @@ void setup() {
 }
 void loop() {
     enum avenger {mo_day = 0, mo_night, ye_day, ye_night} avenger_type;
-    byte avenger_temp[] = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+    int avenger_temp[4][12] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     timeClient.update();
     str_time = Interpretate(timeClient.getHours(), 1) + ":" + Interpretate(timeClient.getMinutes(), 1);
@@ -72,15 +72,15 @@ void loop() {
     server.handleClient();
 
     if (paste_enable && !ptm->tm_min && !ptm->tm_sec) {
-        int hours = ptm->tm_hours;
+        int hours = ptm->tm_hour;
         if ((hours < 8) || (hours > 19)) {
-	    avenger_type = ye_night;
-	    if (hours > 19) {hours = hours - 11;}
-	} else if (hours > 7 && hours < 20) {
+        avenger_type = ye_night;
+        if (hours > 19) {hours = hours - 11;}
+    } else if (hours > 7 && hours < 20) {
             avenger_type = ye_day;
             hours = hours - 8;
         } 
-        PasteAvValue(avenger_temp, avenger_type, hour, byte(bme.readTemperature()));
+        PasteAvValue(avenger_temp, avenger_type, hours, int(bme.readTemperature()));
         paste_enable = false;
     }
     if (!paste_enable && ptm->tm_min) {paste_enable = true;}
@@ -145,24 +145,25 @@ String Interpretate(int val, bool time_format)
     return value = String(hundreds) + String(dec) + String(ones);
 }
 
-int AvrPasteCounter(byte* arr)
+int AvrPasteCounter(int* arr)
 {
     int size = 12, count;
-    for (count = 0, count < size, ++count) {
+    for (count = 0; count < size; ++count) {
         if (!(*(arr + count))) {return count;}
+        }
         return -1;
-    }
-};
+    
+}
 
-byte AverageCalc(byte* arr_source)
+int AverageCalc(int* arr_source)
 {
     int count = AvrPasteCounter(arr_source);
-    byte sum = 0;
+    int sum = 0;
     if (count) {
         for (int i = 0; i < count; ++i) {
             sum += *(arr_source + i);
         }
-        sum /= byte(count);
+        sum /= int(count);
     }
     return sum;
 }
