@@ -5,6 +5,8 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
+#define ROW_SIZE 12
+
 /* Установите здесь свои SSID и пароль */
 const char* ssid = "Andrey_Fe-netis";  
 const char* password = "20031984";  
@@ -38,7 +40,8 @@ void PasteAvValue(int begin[4][12], int pastes_row, int paste_place, int vals_ti
 
 int AverageCalc(int* arr_source);
 int AvrPasteCounter(int* arr);
-enum average AvrTypeSwitcher();
+void ArRowsSwitcher(average* average_type, int* hours);
+void ClearStatistic(int* arr_begin, const int* average_type); //to clear filling-up array's row
 
 void setup() {
     Serial.begin(115200);
@@ -78,23 +81,13 @@ void loop() {
 
     if (paste_enable && !ptm->tm_min && !ptm->tm_sec) {
         int hours = ptm->tm_hour;
-        if ((hours < 8) || (hours > 19)) {
-            average_type = ye_night;
-            if (hours > 19) {hours = hours - 11;}
-        } else if (hours > 7 && hours < 20) {
-            average_type = ye_day;
-            hours = hours - 8;
-        } 
-        PasteAvValue(average_temp, average_type, hours, int(bme.readTemperature()));
-        average_type = mo_day;
-        average_typeH = ye_day;
-        *(*(average_temp + average_type) + AvrPasteCounter(*(average_temp + average_type))) = AverageCalc(*(average_temp + average_typeH));
-        average_type = mo_night;
-        average_typeH = ye_night;
-        *(*(average_temp + average_type) + AvrPasteCounter(*(average_temp + average_type))) = AverageCalc(*(average_temp + average_typeH));
-        paste_enable = false;
+        ArRowsSwitcher(&average_type, &hours); //switches average_type and hours to fill corresponding arrays
+        if (paste_enable) {
+            PasteAvValue(average_temp, average_type, hours, int(bme.readTemperature()));//pastes corresponding values to array
+            paste_enable = false;
+	} 
     }
-    if (!paste_enable && ptm->tm_min) {paste_enable = true;}
+    if (!paste_enable && ptm->tm_min) {paste_enable = true;} //returns flag to next fill enable
     
 }
 
@@ -163,13 +156,14 @@ String Interpretate(int val, bool time_format)
 }
 
 //calculating number of fillings arrays days/nights on mo_day/mo_night
+//returns 0 if array is fill-up (for 0 and 1 statistic arrays)
 int AvrPasteCounter(int* arr)
 {
-    int size = 12, count;
-    for (count = 0; count < size; ++count) {
+    int count;
+    for (count = 0; count < ROW_SIZE; ++count) {
         if (!(*(arr + count))) {return count;}
         }
-        return -1;
+        return 0; 
     
 }
 
@@ -186,7 +180,13 @@ int AverageCalc(int* arr_source)
     }
     return sum;
 }
-enum average AvrTypeSwitcher()
+void ArRowsSwitcher(average* average_type, int* hours)
 {
-
+    if (*hours < 8 || hours > 19)  {
+        *average_type = ye_night;
+	if(*hours > 19) {*hours -= 11;}
+    } else if (*hours > 7 && *hours < 20) {
+        *hours -= 8;
+        *average_type = ye_day;
+    }
 };
