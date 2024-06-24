@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include "stat_class.h"
 
 #define ROW_SIZE 12
 
@@ -27,6 +28,7 @@ String str_date;
 String months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 String week_days[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 bool paste_enable = true;
+enum average {mo_day = 0, mo_night, ye_day, ye_night} average_type, average_typeH;
 
 //func of interprerating int to string
 String Interpretate(int val, bool time_format=false);
@@ -65,7 +67,7 @@ void setup() {
     timeClient.setTimeOffset(10800);
 }
 void loop() {
-    enum average {mo_day = 0, mo_night, ye_day, ye_night} average_type, average_typeH;
+    
     int average_temp[4][12] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     timeClient.update();
@@ -85,7 +87,7 @@ void loop() {
         if (paste_enable) {
             PasteAvValue(average_temp, average_type, hours, int(bme.readTemperature()));//pastes corresponding values to array
             paste_enable = false;
-	} 
+    } 
     }
     if (!paste_enable && ptm->tm_min) {paste_enable = true;} //returns flag to next fill enable
     
@@ -182,9 +184,9 @@ int AverageCalc(int* arr_source)
 }
 void ArRowsSwitcher(average* average_type, int* hours)
 {
-    if (*hours < 8 || hours > 19)  {
+    if (*hours < 8 || *hours > 19)  {
         *average_type = ye_night;
-	if(*hours > 19) {*hours -= 11;}
+    if(*hours > 19) {*hours -= 11;}
     } else if (*hours > 7 && *hours < 20) {
         *hours -= 8;
         *average_type = ye_day;
