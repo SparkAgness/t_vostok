@@ -11,12 +11,30 @@ class Statistic
         int night_hours[12];
         int av_day_temp[10];
         int av_night_temp[10];
-        int empty_field;
+        int empty_field; //the var-counter for day/night hours arrays
+        int next_av_field; //the var-counter for av_day/av_night temp arrays
 
     public:
 	Statistic();
-        void SetHours(int hours);
-        void SetEmptyField();
+        void SetHours(int hours); //filling corresponding day/night hours values (OK)
+        void SetEmptyField(int* arr); //sets this->empty_field next after field's non-zero value of count - only for day/night hours (OK)
+        void SetNextAvField(); //sets the counter for filling field for av_day/av_night arrays (OK)
+        void ClearFullArr(int* arr); //clears full array - only for day/night_hours
+        int AvTemp(int* arr_s, int* arr_d); //calculates the values of average temp for av_day/av_night
+        void SetAvTemp(int* arr); //filling correspondings av_day/av_night temperature's values
+};
+
+void Statistic::SetNextAvField() 
+{
+    this->next_av_field += 1;
+    if (STAT_DAYS == this->next_av_field) {this->next_av_field = 0;}
+};
+
+void Statistic::SetEmptyField(int* arr) 
+{
+    for (int i = 0; i < HOURS; ++i) {
+        if (!*(arr + i)) this->empty_field = i;
+    }
 };
 
 void Statistic::SetHours(int hours)
@@ -36,7 +54,8 @@ void Statistic::SetHours(int hours)
 
 Statistic::Statistic()
 {
-    empty_field = 0;
+    this->next_av_field = 0;
+    this->empty_field = 0;
     for (int i = 0; i < HOURS; ++i) {
         this->day_hours[i] = 0;
         this->night_hours[i] = 0;
