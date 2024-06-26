@@ -19,9 +19,38 @@ class Statistic
         void SetHours(int hours); //filling corresponding day/night hours values (OK)
         void SetEmptyField(int* arr); //sets this->empty_field next after field's non-zero value of count - only for day/night hours (OK)
         void SetNextAvField(); //sets the counter for filling field for av_day/av_night arrays (OK)
-        void ClearFullArr(int* arr); //clears full array - only for day/night_hours
-        int AvTemp(int* arr_s, int* arr_d); //calculates the values of average temp for av_day/av_night
-        void SetAvTemp(int* arr); //filling correspondings av_day/av_night temperature's values
+        void ClearFullArr(int* arr); //clears full array - only for day/night_hours (OK)
+        int AvTemp(bool day = true); //calculates the values of average temp for av_day/av_night (OK)
+        void SetAvTemp(); //filling correspondings av_day/av_night temperature's values (OK)
+};
+
+void Statistic::SetAvTemp()
+{
+    *(this->av_night_temp + this->next_av_field) = AvTemp(false);
+    *(this->av_day_temp + this->next_av_field) = AvTemp();
+};
+
+int Statistic::AvTemp(bool day)
+{
+    int sum = 0;
+    for (int i = 0; i < HOURS; ++i) {
+        if (day) {
+            sum += *(this->day_hours + i);
+        } else {
+            sum += *(this->day_hours + i);
+        }
+    }
+    return sum;
+};
+
+
+void Statistic::ClearFullArr(int *arr)
+{
+    if (*(this->day_hours + HOURS - 1)) {
+        for (int i = 0; i < HOURS; ++i) {
+            *(this->day_hours + i) = 0;
+        }
+    }
 };
 
 void Statistic::SetNextAvField() 
@@ -42,13 +71,13 @@ void Statistic::SetHours(int hours)
     int i = 0;
     if (hours > 8 && hours < 21) {
         i = hours - 9;
-        this->*(day_hours + i) = hours;
+        this->day_hours[i] = hours;
     } else if (hours > 20) {
         i = hours - 12;
-        this->*(night_hours + i) = hours;
+        this->night_hours[i] = hours;
     } else {
         i = hours;
-        this->*(night_hours + i) = hours;
+        this->night_hours[i] = hours;
     }
 };
 
