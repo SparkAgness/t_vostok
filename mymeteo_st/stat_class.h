@@ -2,15 +2,17 @@
 #define STAT
 
 #define HOURS 12
-#define STAT_DAYS 10
+#define STAT_DAYS 10 
 
 class Statistic
 {
     private:
-        int day_hours[12];
-        int night_hours[12];
-        int av_day_temp[10];
-        int av_night_temp[10];
+        int day_hours[HOURS];
+        int night_hours[HOURS];
+        int day_humid[2*HOURS];
+        int av_day_temp[STAT_DAYS];
+        int av_night_temp[STAT_DAYS];
+        int av_humid[STAT_DAYS];
         int empty_field; //the var-counter for day/night hours arrays
         int next_av_field; //the var-counter for av_day/av_night temp arrays
 
@@ -22,6 +24,34 @@ class Statistic
         void ClearFullArr(int* arr); //clears full array - only for day/night_hours (OK)
         int AvTemp(bool day = true); //calculates the values of average temp for av_day/av_night (OK)
         void SetAvTemp(); //filling correspondings av_day/av_night temperature's values (OK)
+	void SetAvHumid();
+        int GetDayAverage();
+        int GetNightAverage();
+        int GetHumidAverage();
+};
+
+int Statistic::GetHumidAverage()
+{
+    return *(this->av_humid + this->next_av_field);
+};
+
+void Statistic::SetAvHumid()
+{
+    int sum = 0;
+    for (int i = 0; i < 2*HOURS; ++i) {
+        sum += *(this->day_humid + i);
+    } 
+    *(this->av_humid + next_av_field) = sum;
+};
+
+int Statistic::GetDayAverage()
+{
+    return *(this->av_day_temp + this->next_av_field);
+};
+
+int Statistic::GetNightAverage()
+{
+    return *(this->av_night_temp + this->next_av_field);
 };
 
 void Statistic::SetAvTemp()
@@ -73,7 +103,7 @@ void Statistic::SetHours(int hours)
         i = hours - 9;
         this->day_hours[i] = hours;
     } else if (hours > 20) {
-        i = hours - 12;
+        i = hours - HOURS;
         this->night_hours[i] = hours;
     } else {
         i = hours;
@@ -92,6 +122,10 @@ Statistic::Statistic()
     for (int i = 0; i < STAT_DAYS; ++i) {
         this->av_day_temp[i] = 0;
         this->av_night_temp[i] = 0;
+        this->av_humid[i] = 0;
     } 
+    for (int i = 0; i < 2*HOURS; ++i) {
+        this->day_humid[i] = 0;
+    }
 };
 #endif
