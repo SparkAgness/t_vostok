@@ -16,34 +16,22 @@ ESP8266WebServer server(80);
 GyverBME280 bme;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
+Statistic monitor;
 
 //for pasting bme's measutments into web-interface
 String str_temp;
 String str_press;
 String str_humid;
-String str_average_temp;
+String str_ye_tempD;
+String str_ye_tempN;
 
 String str_time;
 String str_date;
 String months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 String week_days[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-bool paste_enable = true;
-enum average {mo_day = 0, mo_night, ye_day, ye_night} average_type, average_typeH;
 
 //func of interprerating int to string
 String Interpretate(int val, bool time_format=false);
-
-//average values adding
-void PasteAvValue(int begin[4][12], int pastes_row, int paste_place, int vals_time)
-{
-    begin[pastes_row][paste_place] = vals_time;
-};
-
-
-int AverageCalc(int* arr_source);
-int AvrPasteCounter(int* arr);
-void ArRowsSwitcher(average* average_type, int* hours);
-void ClearStatistic(int* arr_begin, const int* average_type); //to clear filling-up array's row
 
 void setup() {
     Serial.begin(115200);
@@ -68,29 +56,32 @@ void setup() {
 }
 void loop() {
     
-    int average_temp[4][12] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-
     timeClient.update();
     str_time = Interpretate(timeClient.getHours(), 1) + ":" + Interpretate(timeClient.getMinutes(), 1);
     time_t epochTime = timeClient.getEpochTime();
     tm* ptm = gmtime((time_t*)&epochTime);
-    str_date = week_days[timeClient.getDay()] + ",\n " + String(ptm->tm_mday) + " " + months[ptm->tm_mon] + " " + String(ptm->tm_year + 1900);
-    str_temp = Interpretate(int(bme.readTemperature()) - 3);
-    str_press = Interpretate(int(bme.readPressure())/133);
-    str_humid = Interpretate(int(bme.readHumidity()));
-    str_average_temp = Interpretate(*(*(average_temp + 2)));
-    server.handleClient();
-
-    if (paste_enable && !ptm->tm_min && !ptm->tm_sec) {
-        int hours = ptm->tm_hour;
-        ArRowsSwitcher(&average_type, &hours); //switches average_type and hours to fill corresponding arrays
-        if (paste_enable) {
-            PasteAvValue(average_temp, average_type, hours, int(bme.readTemperature()));//pastes corresponding values to array
-            paste_enable = false;
-    } 
+    int temp = bme.readTemperature() - 3;
+    int humidity = int(bme.readHumidity());
+    int pres = bme.readPressure()/133;
+    if (!ptm->tm_min) {
+        monitor.SetHours(ptm->tm_hour, temp);
+        monitor.SetHumidity(ptm->tm_hour, humidity);
+        if (!ptm->tm_hour) {
+            monitor.SetAvTemp();
+            monitor.SetAvHumid();
+            monitor.SetNextAvField(); //count++
+        }
+        monitor.SwitchFillingEn(); //filling_en = false
     }
-    if (!paste_enable && ptm->tm_min) {paste_enable = true;} //returns flag to next fill enable
-    
+    if (ptm->tm_min) {monitor.SwitchFillingEn();} //filling_en = true
+    str_date = week_days[timeClient.getDay()] + ",\n " + String(ptm->tm_mday) + " " + months[ptm->tm_mon] + " " + String(ptm->tm_year + 1900);
+    str_temp = Interpretate(int(bme.readTemperature() - 3));
+    str_press = Interpretate(pres);
+    str_humid = Interpretate(humidity);
+    str_ye_tempD = Interpretate(monitor.GetDayAverage());
+    str_ye_tempN = Interpretate(monitor.GetNightAverage());
+    server.handleClient();
+       
 }
 
 void handle_OnConnect() {
@@ -123,8 +114,12 @@ String SendHTML(String str_temp) {
     ptr += "<h3>The humidity is:";
     ptr += str_humid;
     ptr += "%</h3>";
-    ptr += "Average temperature yesterday is: ";
-    ptr += str_average_temp;
+    ptr += "<h3>Average temperature yesterday's day is: ";
+    ptr += str_ye_tempD;
+    ptr += "\n</h3>";
+    ptr += "<h3>Average temperature yesterday's night is: ";
+    ptr += str_ye_tempN;
+    ptr += "</h3>\n";
     ptr +="</body>\n";
     ptr +="</html>\n";
   return ptr;
@@ -157,38 +152,3 @@ String Interpretate(int val, bool time_format)
     return value = String(hundreds) + String(dec) + String(ones);
 }
 
-//calculating number of fillings arrays days/nights on mo_day/mo_night
-//returns 0 if array is fill-up (for 0 and 1 statistic arrays)
-int AvrPasteCounter(int* arr)
-{
-    int count;
-    for (count = 0; count < ROW_SIZE; ++count) {
-        if (!(*(arr + count))) {return count;}
-        }
-        return 0; 
-    
-}
-
-//calculating of average value on average_temp array
-int AverageCalc(int* arr_source)
-{
-    int count = AvrPasteCounter(arr_source);
-    int sum = 0;
-    if (count) {
-        for (int i = 0; i < count; ++i) {
-            sum += *(arr_source + i);
-        }
-        sum /= int(count);
-    }
-    return sum;
-}
-void ArRowsSwitcher(average* average_type, int* hours)
-{
-    if (*hours < 8 || *hours > 19)  {
-        *average_type = ye_night;
-    if(*hours > 19) {*hours -= 11;}
-    } else if (*hours > 7 && *hours < 20) {
-        *hours -= 8;
-        *average_type = ye_day;
-    }
-};
