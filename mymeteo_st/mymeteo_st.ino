@@ -5,6 +5,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include "stat_class.h"
+#include "barometer.h"
 
 #define ROW_SIZE 12
 
