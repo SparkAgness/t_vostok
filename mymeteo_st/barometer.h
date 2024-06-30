@@ -8,8 +8,8 @@ class Barometer
 {
     private:
         int pres[PRES_MONIT]; //each 10 minutes 
-        int rain_possible[CALC_PROB]; //each 30 minutes
-        int storm_possible[CALC_PROB]; //each 30 minutes
+        int rain_possible[PRES_MONIT - 1];
+        int storm_possible[PRES_MONIT - 1]; 
         class BaroCounter {
             int press;
             int possible;
@@ -24,15 +24,13 @@ class Barometer
 
 void Barometer::PushPress(int val)
 {
-
+    *(this->pres + this->count.press) = val;
 };
 
 Barometer::BaroCounter& Barometer::BaroCounter::operator ++()
 {
     this->press = this->press + 1;
-    if (1 == this->press%CALC_PROB) {this->possible = this->possible + 1;}
-    if (PRES_MONIT == this->press) {this->press = 0;}
-    if (CALC_PROB == this->possible) {this->possible = 0;}
+     
     return *this; 
 };
 
