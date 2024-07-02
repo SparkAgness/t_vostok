@@ -9,26 +9,15 @@ class Barometer
         int pres[2]; //each 10 minutes 
         int rain_possible[PRES_MONIT];
         int storm_possible[PRES_MONIT]; 
-        int pres_dif_pointer;
-        class BaroCounter { //is needs for remaking - press is not necessary, debug the int possible iteration
-            private:
-                int press; //to make it private!
-                int possible;//to make it private!
-            public:
-                int GetIndPress() const;
-                int GetIndPossible() const;
-                BaroCounter();
-                BaroCounter& operator ++ ();
-        };
-        BaroCounter count;
-
+        int pres_dif_pointer; //points to next arr's space to place next int pres value
+        int help_counter;        
     public:
         Barometer(); //OK
         void PushPress(int); //OK
         void PushRain(int);
-        const int GetDiffPress();
-        void PressDifPointerSw();
-        void 
+        const int GetDiffPress(); //OK
+        void PressDifPointerSw(); //OK
+         
 };
 
 void Barometer::PressDifPointerSw()
@@ -41,7 +30,8 @@ void Barometer::PressDifPointerSw()
 
 const int Barometer::GetDiffPress()
 {
-    return *(this->pres + this->count.GetIndPossible()) - *(this->pres + this->count.GetIndPossible() - 1); //press is private!!!
+    if (!pres_dif_pointer) {return (*(this->pres) - *(this->pres + 1)); }
+    return (*(this->pres + 1) - *(this->pres));
 };
 
 void Barometer::PushRain(int val)
@@ -54,39 +44,16 @@ void Barometer::PushPress(int val)
     *(this->pres + this->press_dif_pointer) = val;
 };
 
-int Barometer::BaroCounter::GetIndPress() const
-{
-    return this->press;    
-};
-
-int Barometer::BaroCounter::GetIndPossible() const
-{
-    return this->possible;
-};
-
-Barometer::BaroCounter& Barometer::BaroCounter::operator ++()
-{
-    this->press = this->press + 1;
-    if (PRES_MONIT == this->press) {this->press = 0;}
-    if (!this->press) {this->possible = 0;}
-    else {this->possible = this->press - 1;}
-    return *this; 
-};
-
-Barometer::BaroCounter::BaroCounter()
-{
-    this->press = 0;
-    this->possible = 0;
-};
 
 Barometer::Barometer()
 {
+    this->pres_dif_pointer = 0;
+    this->help_counter = 0;
     for (int i = 0; i < PRES_MONIT; ++i) {
         *(this->rain_possible + i) = 0;
         *(this->storm_possible + i) = 0;
     }
     *(this->pres) = 0;
     *(this->pres + 1) = 0;
-    pres_dif_pointer = 0;
 };
 #endif

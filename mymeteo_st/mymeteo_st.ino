@@ -5,9 +5,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include "stat_class.h"
-#include "barometer.h"
-
-#define ROW_SIZE 12
+//#include "barometer.h"
 
 /* Установите здесь свои SSID и пароль */
 const char* ssid = "Andrey_Fe-netis";  
@@ -72,9 +70,9 @@ void loop() {
             monitor.SetAvHumid();
             monitor.SetNextAvField(); //count++
         }
-        monitor.SwitchFillingEn(); //filling_en = false
+        monitor.SwitchFillingEn(false); //filling_en = false
     }
-    if (ptm->tm_min) {monitor.SwitchFillingEn();} //filling_en = true
+    if (ptm->tm_min) {monitor.SwitchFillingEn(true);} //filling_en = true
     str_date = week_days[timeClient.getDay()] + ",\n " + String(ptm->tm_mday) + " " + months[ptm->tm_mon] + " " + String(ptm->tm_year + 1900);
     str_temp = Interpretate(int(bme.readTemperature() - 3));
     str_press = Interpretate(pres);

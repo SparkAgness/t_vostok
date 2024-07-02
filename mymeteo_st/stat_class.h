@@ -30,7 +30,7 @@ class Statistic
         const int GetDayAverage(int days_ago = 1); //by default is yesterday
         const int GetNightAverage(int days_ago = 1); //by default is yesterday
         const int GetHumidAverage(int days_ago = 1); //by default is yesterday
-        void SwitchFillingEn();
+        void SwitchFillingEn(bool);
 };
 
 void Statistic::SetHumidity(int hours, int val)
@@ -38,10 +38,10 @@ void Statistic::SetHumidity(int hours, int val)
     if (this->filling_en) {*(this->day_humid + hours) = val;}
 };
 
-void Statistic::SwitchFillingEn()
+void Statistic::SwitchFillingEn(bool flag)
 {
-    if (this->filling_en) {this->filling_en = false;}
-    else {this->filling_en = true;}
+    if (!flag) {this->filling_en = false;}
+    if (flag) {this->filling_en = true;}
 };
 
 const int Statistic::GetHumidAverage(int days_ago)
@@ -72,8 +72,8 @@ const int Statistic::GetNightAverage(int days_ago)
 void Statistic::SetAvTemp()
 {
     if (this->filling_en) {
-        *(this->av_night_temp + this->next_av_field) = AvTemp(false);
-        *(this->av_day_temp + this->next_av_field) = AvTemp();
+        *(this->av_night_temp + this->next_av_field) = this->AvTemp(false);
+        *(this->av_day_temp + this->next_av_field) = this->AvTemp();
     }
 };
 
@@ -106,8 +106,10 @@ void Statistic::ClearFullArr()
 
 void Statistic::SetNextAvField() 
 {
-    this->next_av_field += 1;
-    if (STAT_DAYS == this->next_av_field) {this->next_av_field = 0;}
+    if (this->filling_en) {
+        this->next_av_field += 1;
+        if (STAT_DAYS == this->next_av_field) {this->next_av_field = 0;}
+    }
 };
 
 void Statistic::SetEmptyField(int* arr) 
