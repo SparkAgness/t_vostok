@@ -2,91 +2,64 @@
 #define BARO
 
 #define PRES_MONIT 24
-#define DIF_RAIN 2 //for paste to rain_possible[]
-#define DIF_STORM 4 //for paste to storm_possible[]
+#define RAIN_P 2 //for paste to rain_possible[]
+#define STORM_P 4 //for paste to storm_possible[]
 
 class Barometer
 {
     private:
         int pres[2]; //each 10 minutes 
-        int rain_possible[PRES_MONIT];
-        int pres_dif_pointer; //points to next arr's space to place next int pres value
-        int push_pointer; //points to paste's place into rain_possible 
+        int samples; //counter of paste's rain_possible 
+        int barometer_dif;
         int prediction_factor; //base to int Prediction(). It is a sum/div all difference values from int pres[]
     public:
         Barometer(); //OK
-        void PushPress(int); //OK
-        void PushDiff(); //OK
-        int GetDiffPress() const; //OK
-        void PressDifPointerSw(); //OK
-        void IncrPushPointer(); //OK
-        void DecrPushPointer();
-        int GetPushPointer() const; //OK
-        int Prediction() const;
-         
+        void SetSamples(); //OK
+        int GetSamples() const; //OK
+        void SetBarDiff(int); //OK
+        int GetBarDiff() const; //OK
+        int GetPrediction();                 
+        void PressPush(int);
+	
 };
 
-int Barometer::Prediction() const
+void Barometer::PressPush(int val)
 {
-
+    if (!*(this->pres)) {*(this->pres) = val;}
+    else if (*(this->pres) && (!*(this->pres + 1))) {*(this->pres + 1) = val;}
+    else {*(this->pres) = *(this->pres + 1); *(this->pres + 1) = val;}
 };
 
-int Barometer::GetPushPointer() const
+int Barometer::GetBarDiff() const
 {
-    return this->push_pointer;
+    return this->barometer_dif;
 };
 
-void Barometer::DecrPushPointer()
+void Barometer::SetBarDiff(int value)
 {
-    this->push_pointer -= 1;
-    if (this->push_pointer < 0) {this->push_pointer = PRES_MONIT - 1;}
-};
+    if (!this->samples) {this->barometer_dif = 0;}
+    int dif = *(this->pres + 1) - *(this->pres);
+    this->barometer_dif += dif;
+}
 
-void Barometer::IncrPushPointer()
+int Barometer::GetSamples() const
 {
-    this->push_pointer += 1;
-    if (PRES_MONIT <= this->push_pointer) {this->push_pointer = 0;}
+    return this->samples;
 };
 
-void Barometer::PushDiff()
+void Barometer::SetSamples
 {
-    *(this->rain_possible + this->GetPushPointer()) = this->GetDiffPress();
+    this->samples += 1;
+    if (PRES_MONIT == this->samples) {this->samples = 0;}
 };
-
-void Barometer::PressDifPointerSw()
-{
-    if (!(*(this->pres)) && !(*(this->pres + 1))) {this->pres_dif_pointer = 0;}
-    else if (*(this->pres) && !(*(this->pres + 1))) {this->pres_dif_pointer = 1;}
-    else if (*(this->pres) && *(this->pres + 1) && (this->pres_dif_pointer = 1)) {this->pres_dif_pointer = 0;}
-    else if (*(this->pres) && *(this->pres + 1) && (this->pres_dif_pointer = 0)) {this->pres_dif_pointer = 1;};
-};
-
-int Barometer::GetDiffPress() const
-{
-    if (!pres_dif_pointer) {return (*(this->pres) - *(this->pres + 1)); }
-    return (*(this->pres + 1) - *(this->pres));
-};
-
-void Barometer::PushRain(int val)
-{
-    *(this->rain_possible + this->count.GetIndPossible()) = *(this->pres + this->count.GetIndPress()) - *(this->pres + this->count.GetIndPress() - 1);
-};
-
-void Barometer::PushPress(int val)
-{
-    *(this->pres + this->press_dif_pointer) = val;
-};
-
 
 Barometer::Barometer()
 {
-    this->pres_dif_pointer = 0;
-    this->help_counter = 0;
+    this->samples = 0;
+    this->barometer = 0;
     this->prediction_factor = 0;
-    for (int i = 0; i < PRES_MONIT; ++i) {
-        *(this->rain_possible + i) = 0;
+    for (int i = 0; i < 22; ++i) {
+        *(this->pres + i) = 0;
     }
-    *(this->pres) = 0;
-    *(this->pres + 1) = 0;
 };
 #endif
