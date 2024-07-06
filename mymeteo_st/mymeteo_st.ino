@@ -5,7 +5,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include "stat_class.h"
-//#include "barometer.h"
+#include "barometer.h"
 
 /* Установите здесь свои SSID и пароль */
 const char* ssid = "Andrey_Fe-netis";  
@@ -16,6 +16,7 @@ GyverBME280 bme;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 Statistic monitor;
+Barometer rain;
 
 //for pasting bme's measutments into web-interface
 String str_temp;
@@ -23,6 +24,7 @@ String str_press;
 String str_humid;
 String str_ye_tempD;
 String str_ye_tempN;
+String str_rain_prediction;
 
 String str_time;
 String str_date;
@@ -73,12 +75,17 @@ void loop() {
         monitor.SwitchFillingEn(false); //filling_en = false
     }
     if (ptm->tm_min) {monitor.SwitchFillingEn(true);} //filling_en = true
+    rain.PressPush(pres, ptm->tm_min);
+    if (rain.GetRainPrediction() < 50) {str_rain_prediction = "Rain impossible";}
+        else if(rain.GetRainPrediction() >= 50 && rain.GetRainPrediction() < 85) {str_rain_prediction = "Rain possible";}
+        else str_rain_prediction = "Rain is near!!!";
     str_date = week_days[timeClient.getDay()] + ",\n " + String(ptm->tm_mday) + " " + months[ptm->tm_mon] + " " + String(ptm->tm_year + 1900);
     str_temp = Interpretate(int(bme.readTemperature() - 3));
     str_press = Interpretate(pres);
     str_humid = Interpretate(humidity);
     str_ye_tempD = Interpretate(monitor.GetDayAverage());
     str_ye_tempN = Interpretate(monitor.GetNightAverage());
+
     server.handleClient();
        
 }
@@ -113,6 +120,9 @@ String SendHTML(String str_temp) {
     ptr += "<h3>The humidity is:";
     ptr += str_humid;
     ptr += "%</h3>";
+    ptr += "<h3>";
+    ptr += str_rain_prediction;
+    ptr += "</h3>";
     ptr += "<h3>Average temperature yesterday's day is: ";
     ptr += str_ye_tempD;
     ptr += "\n</h3>";
