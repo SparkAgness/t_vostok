@@ -8,7 +8,7 @@
 #include "barometer.h"
 
 /* Установите здесь свои SSID и пароль */
-const char* ssid = "Andrey_Fe-netis";  
+const char* ssid = "Andrey_Fe";  
 const char* password = "20031984";  
 
 ESP8266WebServer server(80);
