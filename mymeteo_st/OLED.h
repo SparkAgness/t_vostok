@@ -3,7 +3,10 @@
 
 #include "SSD1306Wire.h"
 
-int one[] = 
+class Number
+{
+    private:
+        static inline const int one[] = 
         [[15,2], [16, 2], [17, 2], 
         [14, 3], [15, 3], [16, 3], [17, 3], 
         [13, 4], [14, 4], [15, 4], [16, 4], [17, 4], 
@@ -29,21 +32,20 @@ int one[] =
         [13, 24], [14, 24], [15, 24], [16, 24], [17, 24], 
         [13, 25], [14, 25], [15, 25], [16, 25], [17, 25], 
         [13, 26], [14, 26], [15, 26], [16, 26], [17, 26]];
-class Number
-{
-    private:
+
         int offset;
+        int val;
     public:
-        void Drawing(int* , int);
-        void SetDisplay(int);
+        void Drawing(int* , int) const;
+        static void SetDisplay(int) const;
 };
 
-void Number::SetDisplay(int numb)
+void Number::SetDisplay() const
 {
-
+    if (1 == this->val) {Number::Drawing(Number::one, sizeof(one)/sizeof(int));}
 };
 
-void Number::Drawing(int* pt, int size)
+void Number::Drawing(int* pt, int size) const
 {
     SSD1306Wire display(0x3c, 12, 13, GEOMETRY_128_32);
     for (int i = 0; i < size; ++i) {
