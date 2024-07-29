@@ -33,24 +33,28 @@ class Number
         [13, 25], [14, 25], [15, 25], [16, 25], [17, 25], 
         [13, 26], [14, 26], [15, 26], [16, 26], [17, 26]];
 
-        int offset;
-        int val;
+        int offset_;
+        int val_;
     public:
         void Drawing(int* , int) const;
         static void SetDisplay(int) const;
 };
 
-void Number::SetDisplay() const
+static void Number::SetDisplay() const
 {
-    if (1 == this->val) {Number::Drawing(Number::one, sizeof(one)/sizeof(int));}
+    if (1 == this->val_) {this->Drawing(Number::one, sizeof(one)/sizeof(int));}
 };
 
 void Number::Drawing(int* pt, int size) const
 {
     SSD1306Wire display(0x3c, 12, 13, GEOMETRY_128_32);
+    display.clear();
     for (int i = 0; i < size; ++i) {
-        display.SetPixel(*((pt + 2)*i) + this->offset, *((pt + 2)*i + 1) + this->offset);
+        display.SetPixel(*((pt + 2)*i) + this->offset_, *((pt + 2)*i + 1) + this->offset_);
     }
+    display.display();
 };
+
+Number::Number(int offset, int val) : offset_(offset), val_(val);
 
 #endif
