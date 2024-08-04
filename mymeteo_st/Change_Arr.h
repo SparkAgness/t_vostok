@@ -15,17 +15,28 @@ class Changeable_Array final
         Changeable_Array& operator=(Changeable_Array&&); //OK
         ~Changeable_Array() {delete *coord_}; //OK
 
-        int** GetCoord() const;
-        int GetLength() const;
-        void PushBack(int*);
+        int* CoordValues(int, int);
+        int** GetCoord() const; //OK
+        int GetLength() const; //OK
+        void PushBack(int*); //OK
+};
+
+int* Changeable_Array::CoordValues(int row)
+{
+    return *(this->coord + row);
 };
 
 void Changeable_Array::PushBack(int* push)
 {
-    ChangeArr::coord* tmp = new ChangeArr::coord [this->lenght_]
-    for (int i = 0; i < this->lenght_; ++i) {
-        
+    this->lenght_ += 1;
+    int** coord = new int*[this->lenght_];
+    for (int i = 0; i < this->lenght_ - 1; ++i) {
+        *(coord + i) = new int[2] {*(*(this->coord_ + i)), *(*(this->coord_ + i) + 1)};
     }
+    *(coord + this->lenght_ - 1) = new int[2] {*(push), *(push + 1)};
+    for (int i = 0; i < this->lenght_ - 1; ++i) {delete [] *(this->coord_ + i);}
+    this->coord_ = coord;
+    for (int i = 0; i < this->coord; ++i) {delete [] *(coord + i);}
 };
 
 int Changeable_Array::GetLenght() const
@@ -60,11 +71,9 @@ Changeable_Array& Changeable_Array::operator=(const Changeable_Array& rhs)
 
 Changeable_Array::Changeable_Array(int x, int y)
 {
-    int* coord = new int [2];
-    *coord = x;
-    *(coord + 1) = y;
-    *(this->coord_) = coord;
     this->lenght_ = 1;
+    this->coord_ = new int*[this->lenght_];
+    *(this->coord_) = new int[2] {x, y};
 };
 
 Changeable_Array::Changeable_Array(Changeable_Array&& source)
@@ -75,11 +84,10 @@ Changeable_Array::Changeable_Array(Changeable_Array&& source)
 
 Changeable_Array::Changeable_Array(const Changeable_Array& source)
 {
-    this->lenght_ = source.GetLenght();
-    this->coord_ = new int[2*this->lenght];
+    this->lenght_ = source.lenght_();
+    this->coord_ = new int*[this->lenght];
     for (int i = 0; i < this->lenght; ++i) {
-        *(*(this->lenght + i)) = *(*(source.GetCoord + i));
-        *(*(this->lenght + i) + 1) = *(*(source.GetCoord + i) + 1);
+        *(*(this->lenght) + i) = new int[2] {*(*(source.coord_ + i)), *(*(source.coord_ + i) + 1)};
     }
 };
 #endif
