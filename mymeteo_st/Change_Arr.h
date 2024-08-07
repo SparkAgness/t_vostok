@@ -22,10 +22,7 @@ class Changeable_Array final
 
 void Changeable_Array::PushBack(int* push)
 {
-    ChangeArr::coord* tmp = new ChangeArr::coord [this->lenght_]
-    for (int i = 0; i < this->lenght_; ++i) {
-        
-    }
+    int** tmp = new (int [2]) []
 };
 
 int Changeable_Array::GetLenght() const
