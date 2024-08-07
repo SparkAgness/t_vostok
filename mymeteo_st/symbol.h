@@ -29,7 +29,15 @@ void Symbol::DrawTwo()
     for (int y = 0; y <= HIGHT; ++y) {
         switch(y) {
             case 2: 
-                this->coord_kit_.
+                for (x = 0; x < 7; ++x) {int tmp [2] {x + offset1 + 4, y}; this->coord_kit_.PushBack(tmp);} 
+            case 3: 
+                for (x = 0; x < 11; ++x) {int tmp[2] {x + offset1 + 2, y}; this->coord_kit_.PushBack(tmp);}
+            case 4:
+                for (x = 0; x < 14; ++x) {int tmp[2] {x + offset1 + 1, y}; this->coord_kit_.PushBack(tmp);}
+            case 5:
+                for (x = 0; x < 5; ++x) {int tmp[2] {x + offset1, y}; int tmp2[2] {x + offset2, y}; this->coord_kit_.PushBack(tmp); this->coord_kit_.PushBack(tmp2);}
+            case 6: 
+                
 	}
     }
 };
