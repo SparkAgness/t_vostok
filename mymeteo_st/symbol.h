@@ -26,7 +26,9 @@ class Symbol final
         Changeable_Array coord_kit_;
 
         void Draw_UpSector1(int); //OK
-        void Draw_UpSector2(int);
+        void Draw_UpSector2(int); //OK
+        void Draw_UpSector3(int); //OK
+        void Draw_UpSector4(int) //OK
         void DrawTwo();
 
     public:
@@ -34,23 +36,72 @@ class Symbol final
         void Symb_Drawing(const int);
 };
 
+void Symbol::Draw_UpSector4(int offset)
+{
+    int out_offset = 7;
+    int begin_board = offset + HOR_AXIS;
+    int end_board = offset + HOR_AXIS + out_offset;
+    int tmp[2] {0, 0};
+    for (y = VERT_QUATER + 1; y < 2*VERT_QUATER; ++y) {
+        switch (y)
+        {
+            case 11: for (int x = begin_board + IN_RAD - 1; x <= end_board - 1; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            case 12: for (int x = begin_board; x <= end_board - 2; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+	    case 13: for (int x = begin_board; x <= end_board - 4; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;} 
+            default: for (int x = begin_board + IN_RAD; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+       }
+    }
+
+};
+
+void Symbol::Draw_UpSector3(int offset)
+{
+    int in_offset = 7;
+    int begin_board = in_offset + offset;
+    int end_board = offset + HOR_AXIS;
+    int tmp[2] {0, 0};
+    for (y = VERT_QUATER + 1; y < 2*VERT_QUATER; ++y) {
+        switch (y) 
+        {
+            case 11: for (int x = begin_board + 1; x <= end_board - IN_RAD + 1; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
+            case 12: for (int x = begin_board + 2; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            case 13: for (int x = begin_board + 4; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            default: for (int x = begin_board; x <= end_board - IN_RAD; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
+        }
+    }
+};
+
 void Symbol::Draw_UpSector2(int offset)
 {
     int out_offset = 7;
+    int begin_board = offset + HOR_AXIS;
+    int end_board = offset + HOR_AXIS + out_offset;
     int tmp[2] {0, 0};
+    for (y = 2; y <= VERT_QUATER; ++y) {
+        switch (y)
+        {
+            case 2: for (int x = begin_board; x <= end_board - 4; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;} 
+	    case 3: for (int x = begin_board; x <= end_board - 2; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            case 4: for (int x = begin_board + IN_RAD - 1; x <= end_board - 1; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            default: for (int x = begin_board + IN_RAD; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+
+        }
+    }
 };
 
 void Symbol::Draw_UpSector1(int offset)
 {
     int in_offset = 7;
     int tmp[2] {0, 0};
+    int begin_board = offset + in_offset;
+    int end_board = offset + HOR_AXIS;
     for (int y = 2; y <= VERT_QUARTER; ++y) {
         switch(y)
         {
-            case 2: for (int x = offset + in_offset + 4; x <= HOR_AXIS; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
-            case 3: for (int x = offset + in_offset + 2; x <= HOR_AXIS; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
-            case 4: for (int x = offset + in_offset + 1; x <= HOR_AXIS - IN_RAD + 1; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
-            default: for (int x = offset + in_offset; x <= HOR_AXIS - IN_RAD; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
+            case 2: for (int x = begin_board + 4; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            case 3: for (int x = begin_board + 2; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
+            case 4: for (int x = begin_board + 1; x <= end_board - IN_RAD + 1; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
+            default: for (int x = begin_board; x <= end_board - IN_RAD; ++x) {tmp[2]{x,y}; this->coord_kit_.PushBack(tmp); break;} 
             
 	}
     }
