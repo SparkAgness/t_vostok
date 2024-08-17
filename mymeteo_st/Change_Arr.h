@@ -15,7 +15,7 @@ class Changeable_Array final
         Changeable_Array& operator=(Changeable_Array&&); //OK
         ~Changeable_Array() {delete *coord_}; //OK
 
-        int* CoordValues(int, int);
+        int* CoordValues(int);
         int** GetCoord() const; //OK
         int GetLength() const; //OK
         void PushBack(int*); //OK
