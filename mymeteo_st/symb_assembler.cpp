@@ -2,7 +2,7 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
-void Corner::Fig_Creater(int offset) override
+void Symbol::Corner::Fig_Creater(int offset) override
 {
     int y_beg = 2, y_end = 5, x_beg = offset + 7, x_end = offset + 10; 
     for (int y = y_beg; y <= y_end; ++y) {
@@ -13,3 +13,15 @@ void Corner::Fig_Creater(int offset) override
         }
     }
 }
+ 
+void Symbol::Corner::Rotate_AgainstCW(int yield = 1) override
+{
+    int len = coord_.GetLenght();
+    for (int j = 0; j < yield; ++j) {
+        for (int i = 0; i < len; ++i) {
+            int exchangeable = *(*(coord_ + i));
+            *(*(coord_ + i)) = *(*(coord_ + i) + 1);
+            *(*(coord_ + i) + 1) = 1 - exchangeable + side_;
+    }
+    }
+};
