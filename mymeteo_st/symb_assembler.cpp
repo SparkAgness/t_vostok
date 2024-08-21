@@ -12,7 +12,7 @@ void Symbol::Corner::Fig_Creater() override
             default: {int tmp[2] {x_beg, y}; coord_PushBack(tmp); break;}
         }
     }
-}
+};
  
 void Symbol::Corner::Rotate_AgainstCW(int yield = 1) override
 {
@@ -22,6 +22,29 @@ void Symbol::Corner::Rotate_AgainstCW(int yield = 1) override
             int exchangeable = *(*(coord_ + i));
             *(*(coord_ + i)) = *(*(coord_ + i) + 1);
             *(*(coord_ + i) + 1) = 1 - exchangeable + side_;
+        }
+    }
+};
+
+void Symbol::Up_QuartCircle::FigCreater() override
+{
+    int y_beg = 2, y_end = Y_MIDDLE/2 + 1, x_beg = sum_offset_, x_end = X_MIDDLE;
+    for (int y = y_beg; y <= y_end; ++y) {
+        switch(y) {
+            case y_beg: {for (int x = x_beg + 4; x <= x_end; ++x){int tmp[2] {x, y}; coord_.PushBack(tmp); break;}}
+            case y_beg + 1: {for (int x = x_beg + 2; x <= x_end; ++x){int tmp[2] {x, y}; coord_.PushBack(tmp); break;}}
+            case y_beg + 2: {for (int x = x_beg + 1; x <= x_end - 3; ++x){int tmp[2] {x, y}; coord_.PushBack(tmp); break;}}
+            default: {for (int x = x_beg; x <= x_end - 4; ++x){int tmp[2] {x, y}; coord_.PushBack(tmp); break;}}
+        }
+    }
+};
+
+void Symbol::Up_QuartCircle::Mirror(bool hor, bool vert) override
+{
+    int arr_lengh = coord_.GetLenght();
+    if (hor && !vert) {
+        for (int i = 0; i < arr_lengh; ++i) {
+            coord_ //it needs to method to edit the array
         }
     }
 };

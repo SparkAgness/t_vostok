@@ -7,7 +7,7 @@ class Symbol final
 {
     private:
         Changeable_Array figure_kit_;
-        int offset_;
+        int offset_;//means sequence of symbol at display
 
         class Symbol_Part
         {
@@ -27,10 +27,10 @@ class Symbol final
             private:
                 Changeable_Array coords_;
                 int side_;
-                int sum_offset_;
+                int sum_offset_; //consists of this->offset + inside offset (by default is 7)
             protected:
-                void Rotate_AgainstCW(int) override;
-                void Fig_Creater(int) override;
+                void Rotate_AgainstCW(int) override;//ok
+                void Fig_Creater(int) override;//ok
             public:
             Corner(int side = 4, in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
         };
@@ -43,6 +43,8 @@ class Symbol final
                 int sum_offset_;
             public:
                 Up_QuartCircle(int side, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
+                void Fig_Creater() override;//ok
+                void Mirror(bool, bool) override;
         };
 
     public:
