@@ -1,4 +1,6 @@
+#include <exception>
 #define "sys_assembler.h"
+
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
@@ -44,7 +46,14 @@ void Symbol::Up_QuartCircle::Mirror(bool hor, bool vert) override
     int arr_lengh = coord_.GetLenght();
     if (hor && !vert) {
         for (int i = 0; i < arr_lengh; ++i) {
-            coord_ //it needs to method to edit the array
+            int val = *(coord_.CoordValues(i));
+            coord_.ChangeMember(i, X_MIDDLE*2 - val);
+        } else if (!hor && vert) {
+            for (int i = 0; i < arr_lengh; ++i) {
+                int val = *(coord_.CoordValues(i) + 1);
+                coord_.ChangerMember(i, true, 2*(Y_MIDDLE + 1) - val);
+        } else {throw std::exception()}//EXCEPTION
+	    
         }
     }
 };

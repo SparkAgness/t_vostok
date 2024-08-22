@@ -44,7 +44,7 @@ class Symbol final
             public:
                 Up_QuartCircle(int side, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
                 void Fig_Creater() override;//ok
-                void Mirror(bool, bool) override;
+                void Mirror(bool, bool) override; //ok, calls with exceptions
         };
 
     public:

@@ -17,7 +17,7 @@ class Changeable_Array final
         Changeable_Array& operator=(Changeable_Array&&); //OK
         ~Changeable_Array() {delete *coord_;}; //OK
 
-        int* CoordValues(int);
+        int* CoordValues(int) const;//OK
         int** GetCoord() const; //OK
         int GetLenght() const; //OK
         void PushBack(int*); //OK
@@ -27,13 +27,13 @@ class Changeable_Array final
 void Changeable_Array::ChangeMember(int mem_numb, bool second_column = 0, int value)
 {
     if (second_column) {
-        *(*(coord + mem_numb) + 1) = value;
+        *(*(coord_ + mem_numb) + 1) = value;
     } else {
-        *(*(coord + mem_numb)) = value;
+        *(*(coord_ + mem_numb)) = value;
     }
 };
 
-int* Changeable_Array::CoordValues(int row)
+int* Changeable_Array::CoordValues(int row) const
 {
     return *(this->coord_ + row);
 };
