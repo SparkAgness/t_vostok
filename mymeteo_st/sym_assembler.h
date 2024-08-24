@@ -2,6 +2,7 @@
 #define SYMBASSEMBLY
 
 #include "Change_Arr.h"
+#include <string>
 
 class Symbol final
 {
@@ -41,6 +42,19 @@ class Symbol final
                 Changeable_Array coords_;
                 int side_;	
                 int sum_offset_;
+                void Mirroring(bool hor, bool vert)
+                {
+                    int arr_lengh = coord_.GetLenght();
+                    if (hor && !vert) {
+                        for (int i = 0; i < arr_lengh; ++i) {
+                        int val = *(coord_.CoordValues(i));
+                        coord_.ChangeMember(i, X_MIDDLE*2 - val);}
+                    } else if (!hor && vert) {
+                        for (int i = 0; i < arr_lengh; ++i) {
+                        int val = *(coord_.CoordValues(i) + 1);
+                        coord_.ChangerMember(i, true, 2*(Y_MIDDLE + 1) - val);}
+                   } else {throw Wrong_Up_QuartCircle() }//EXCEPTION
+		};
             public:
                 Up_QuartCircle(int side, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
                 void Fig_Creater() override;//ok

@@ -41,19 +41,8 @@ void Symbol::Up_QuartCircle::FigCreater() override
     }
 };
 
-void Symbol::Up_QuartCircle::Mirror(bool hor, bool vert) override
+void Symbol::Up_QuartCircle::Mirror(bool horiz, bool vertic) override
 {
-    int arr_lengh = coord_.GetLenght();
-    if (hor && !vert) {
-        for (int i = 0; i < arr_lengh; ++i) {
-            int val = *(coord_.CoordValues(i));
-            coord_.ChangeMember(i, X_MIDDLE*2 - val);
-        } else if (!hor && vert) {
-            for (int i = 0; i < arr_lengh; ++i) {
-                int val = *(coord_.CoordValues(i) + 1);
-                coord_.ChangerMember(i, true, 2*(Y_MIDDLE + 1) - val);
-        } else {throw std::exception()}//EXCEPTION
-	    
-        }
-    }
+    try {Mirroring(horiz, vertic);}
+    catch (Wrong_Up_QuartCircle&) {Mirroring(0, 1);}
 };
