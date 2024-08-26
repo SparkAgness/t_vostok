@@ -28,6 +28,14 @@ void Symbol::Corner::Rotate_AgainstCW(int yield = 1) override
     }
 };
 
+void Symbol::Corner::DownCorner()
+{
+    int lenght = coord_.GetLenght;
+    for (int i = 0; i < lenght; ++i) {
+        coord_.ChangeMember(i, true, *(coord_.CoordValues(i) + 1) + 16)
+    }
+};
+
 void Symbol::Up_QuartCircle::FigCreater() override
 {
     int y_beg = 2, y_end = Y_MIDDLE/2 + 1, x_beg = sum_offset_, x_end = X_MIDDLE;

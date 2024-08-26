@@ -34,6 +34,7 @@ class Symbol final
                 void Fig_Creater(int) override;//ok
             public:
             Corner(int side = 4, in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
+            void DownCorner();
         };
 
         class Up_QuartCircle : protected Symbol_Part
