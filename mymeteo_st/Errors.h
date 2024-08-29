@@ -1,6 +1,7 @@
 #ifndef ERRORS
 #define ERRORS
 #include <string>
+#include "sym_assembler.h"
 
 class Errors
 {

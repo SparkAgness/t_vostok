@@ -1,8 +1,16 @@
 #include <exception>
-#define "sys_assembler.h"
+#define "sym_assembler.h"
 
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
+
+void Symbol::Central_Point::Fig_Creater() override
+{
+    int y_beg = Y_MIDDLE, y_end = Y_MIDDLE + 1, x_beg = sum_offset_, x_end = sum_offset + 3;
+    for (int y = y_beg; y <= y_end; ++y) {
+        for (int x = x_beg; x <= x_end; ++x) {int tmp[2] {x, y}; coord_.PushBack(tmp);}
+    }
+};
 
 void Symbol::Corner::Fig_Creater() override
 {
@@ -32,7 +40,7 @@ void Symbol::Corner::DownCorner()
 {
     int lenght = coord_.GetLenght;
     for (int i = 0; i < lenght; ++i) {
-        coord_.ChangeMember(i, true, *(coord_.CoordValues(i) + 1) + 16)
+        coord_.ChangeMember(i, true, *(coord_.CoordValues(i)))
     }
 };
 
@@ -52,5 +60,5 @@ void Symbol::Up_QuartCircle::FigCreater() override
 void Symbol::Up_QuartCircle::Mirror(bool horiz, bool vertic) override
 {
     try {Mirroring(horiz, vertic);}
-    catch (Wrong_Up_QuartCircle&) {Mirroring(0, 1);}
+    catch (Wrong_Up_QuartCircle& ex) {this->Mirroring(0, 1);}////
 };
