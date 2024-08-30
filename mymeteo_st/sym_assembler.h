@@ -1,8 +1,13 @@
+		//strings 62, 73, 84 maybe are wrong!! retest them
+		//to find nested classes and clear it 
 #ifndef SYMBASSEMBLY
 #define SYMBASSEMBLY
 
 #include "Change_Arr.h"
 #include <string>
+
+#define X_MIDDLE 14
+#define Y_MIDDLE 13
 
 class Symbol final
 {
@@ -41,7 +46,6 @@ class Symbol final
         {
             private:
                 Changeable_Array coords_;
-                int side_;	
                 int sum_offset_;
                 void Mirroring(bool hor, bool vert)
                 {
@@ -57,7 +61,7 @@ class Symbol final
                    } else {throw Wrong_Up_QuartCircle() }//EXCEPTION
 		};
             public:
-                Up_QuartCircle(int side, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
+                Up_QuartCircle(int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
                 void Fig_Creater() override;//ok
                 void Mirror(bool, bool) override; //ok, calls with exceptions
         };
@@ -72,6 +76,16 @@ class Symbol final
             protected:
                 void Fig_Creater() override;
         };
+
+        class Down_QuartCircle : protected Symbol_Part final
+	{
+            private:
+                Changeable_Array coords_;
+                int sum_offset_;
+	    public:
+                Down_QuartCircle(int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
+                void Mirror(bool, bool) override;
+	};
 
 
     public:

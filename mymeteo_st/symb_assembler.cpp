@@ -4,6 +4,19 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Symbol::Down_QuartCircle::Mirror(bool hor = true, bool vert = false) override
+{
+    int arr_lengh = coord_.GetLenght();
+    if (hor && !vert) {
+        for (int i = 0; i < arr_lengh; ++i) {
+            int val = *(coord_.CoordValues(i));
+            coord_.ChangeMember(i, X_MIDDLE*2 - val);}
+    } else if (!hor && vert) {
+            for (int i = 0; i < arr_lengh; ++i) {
+                int val = *(coord_.CoordValues(i) + 1);
+                coord_.ChangerMember(i, true, 2*(Y_MIDDLE + 1) - val);}
+};
+
 void Symbol::Central_Point::Fig_Creater() override
 {
     int y_beg = Y_MIDDLE, y_end = Y_MIDDLE + 1, x_beg = sum_offset_, x_end = sum_offset + 3;
