@@ -21,10 +21,10 @@ class Changeable_Array final
         int** GetCoord() const; //OK
         int GetLenght() const; //OK
         void PushBack(int*); //OK
-        void ChangeMember(int, bool, int)
+        void ChangeMember(int, int, bool);
 };
 
-void Changeable_Array::ChangeMember(int mem_numb, bool second_column = 0, int value)
+void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0)
 {
     if (second_column) {
         *(*(coord_ + mem_numb) + 1) = value;

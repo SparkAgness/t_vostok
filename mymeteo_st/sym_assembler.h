@@ -5,6 +5,7 @@
 
 #include "Change_Arr.h"
 #include <string>
+#include "Errors.h"
 
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
@@ -24,11 +25,10 @@ class Symbol final
                 virtual void Fig_Creater() = 0;
                 virtual void Mirror(bool, bool) = 0;
             public:
-                Symbol_Part(int side) : coords_(0, 0), side_(side) {};
                 virtual ~Symbol_Part();
         };
 
-        class Corner : protected Symbol_Part final
+        class Corner final : protected Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -38,27 +38,27 @@ class Symbol final
                 void Rotate_AgainstCW(int) override;//ok
                 void Fig_Creater() override;//ok
             public:
-            Corner(int side = 4, in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
+            Corner(int side = 4, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
             void DownCorner();
         };
 
-        class Up_QuartCircle : protected Symbol_Part final
+        class Up_QuartCircle final : protected Symbol_Part
         {
             private:
                 Changeable_Array coords_;
                 int sum_offset_;
                 void Mirroring(bool hor, bool vert)
                 {
-                    int arr_lengh = coord_.GetLenght();
+                    int arr_lengh = coords_.GetLenght();
                     if (hor && !vert) {
                         for (int i = 0; i < arr_lengh; ++i) {
-                        int val = *(coord_.CoordValues(i));
-                        coord_.ChangeMember(i, X_MIDDLE*2 - val);}
+                        int val = *(coords_.CoordValues(i));
+                        coords_.ChangeMember(i, X_MIDDLE*2 - val);}
                     } else if (!hor && vert) {
                         for (int i = 0; i < arr_lengh; ++i) {
-                        int val = *(coord_.CoordValues(i) + 1);
-                        coord_.ChangerMember(i, true, 2*(Y_MIDDLE + 1) - val);}
-                   } else {throw Wrong_Up_QuartCircle() }//EXCEPTION
+                        int val = *(coords_.CoordValues(i) + 1);
+                        coords_.ChangeMember(i, true, 2*(Y_MIDDLE + 1) - val);}
+                   } else {throw Wrong_Up_QuartCircle(); }//EXCEPTION
 		};
             public:
                 Up_QuartCircle(int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
@@ -66,7 +66,7 @@ class Symbol final
                 void Mirror(bool, bool) override; //ok, calls with exceptions
         };
 
-        class Central_Point : protected Symbol_Part final
+        class Central_Point final : protected Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -77,7 +77,7 @@ class Symbol final
                 void Fig_Creater() override;
         };
 
-        class Down_QuartCircle : protected Symbol_Part final
+        class Down_QuartCircle final : protected Symbol_Part
 	{
             private:
                 Changeable_Array coords_;

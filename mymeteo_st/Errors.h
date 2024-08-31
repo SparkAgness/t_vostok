@@ -1,5 +1,7 @@
 #ifndef ERRORS
 #define ERRORS
+
+#include <iostream>
 #include <string>
 #include "sym_assembler.h"
 
@@ -8,12 +10,12 @@ class Errors
     private:
     public:
         Errors() {};
-        ~Errors() virtual;
+        virtual ~Errors();
     protected:
-        void GetError() const virtual = 0;
-}
+        virtual void GetError() const = 0;
+};
 
-class Wrong_Up_QuartCircle : protected Errors final
+class Wrong_Up_QuartCircle final : protected Errors
 {
     private:
         std::string name_;
