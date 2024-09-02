@@ -4,6 +4,27 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Symbol::Vertical_Ln::Seven_Creater()
+{
+    int y_beg = Y_MIDDLE - 8, y_end = Y_MIDDLE*2, x_beg = X_MIDDLE + 7, x_end = X_MIDDLE - 7, i = 0;
+    for (int y = y_beg; y <= y_end; ++y) {
+        for (int x = x_end - i; x >= x_beg; --x) {
+            tmp[2] {x, y};
+            coords_.PushBack(tmp);
+            }
+        if (!(y%2)) {i += 1;}
+        }
+
+};
+
+void Symbol::Vertical_Ln::Fig_Creater() override
+{
+    int y_beg = 2, y_end = Y_MIDDLE*2, x_beg = sum_offset_ + X_MIDDLE - 2, x_end = sum_offset_ + X_MIDDLE + 2;
+    for (int y = y_beg; y <= y_end; ++y) {
+        for (int x = x_beg; x <= x_end; ++x) {int tmp[2] {x, y}; coord_.PushBack(tmp);}
+    }
+};
+
 void Symbol::Down_QuartCircle::Mirror(bool hor = true, bool vert = false) override
 {
     int arr_lengh = coord_.GetLenght();

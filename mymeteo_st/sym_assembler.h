@@ -32,13 +32,14 @@ class Symbol final
         {
             private:
                 Changeable_Array coords_;
+                Symbol& parent_;
                 int side_;
                 int sum_offset_; //consists of this->offset + inside offset (by default is 7)
             protected:
                 void Rotate_AgainstCW(int) override;//ok
                 void Fig_Creater() override;//ok
             public:
-            Corner(int side = 4, int in_offset = 7) : coords_(0, 0), side_(side), sum_offset_(in_offset + this->offset_) {};
+            Corner(Symbol& parent, int side = 4, int in_offset = 7) : coords_(0, 0), parent_(parent), side_(side), sum_offset_(in_offset) {sum_offset_ += parent.offset_;};
             void DownCorner();
         };
 
@@ -46,6 +47,7 @@ class Symbol final
         {
             private:
                 Changeable_Array coords_;
+                Symbol& parent_;
                 int sum_offset_;
                 void Mirroring(bool hor, bool vert)
                 {
@@ -61,7 +63,7 @@ class Symbol final
                    } else {throw Wrong_Up_QuartCircle(); }//EXCEPTION
 		};
             public:
-                Up_QuartCircle(int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
+                Up_QuartCircle(Symbol& parent, int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
                 void Fig_Creater() override;//ok
                 void Mirror(bool, bool) override; //ok, calls with exceptions
         };
@@ -70,9 +72,10 @@ class Symbol final
         {
             private:
                 Changeable_Array coords_;
+                Symbol& parent_;
                 int sum_offset_;
             public:
-                Central_Point(int in_offset = X_MIDDLE - 1) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
+                Central_Point(Symbol& parent, int in_offset = X_MIDDLE - 1) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
             protected:
                 void Fig_Creater() override;
         };
@@ -81,12 +84,36 @@ class Symbol final
 	{
             private:
                 Changeable_Array coords_;
+                Symbol& parent_;
                 int sum_offset_;
 	    public:
-                Down_QuartCircle(int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset + this->offset_) {};
+                Down_QuartCircle(Symbol& parent, int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
                 void Mirror(bool, bool) override;
 	};
 
+        class Vertical_Ln final : protected Symbol_Part
+	{
+            private:
+                Changeable_Array coords_;
+                Symbol& parent_;
+                int sum_offset_;
+            public:
+                Vertical_Ln(Symbol& parent, int in_offset = X_MIDDLE) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;}
+                void Fig_Creater() override;
+                void Seven_Creater();
+	};
+
+        class Horizontal_Ln final : protected Symbol_Part
+        {
+            private:
+                Changeable_Array coords_;
+                Symbol& parent_;
+                int sum_offset_;
+            public:
+                Horizontal_Ln(Symbol& parent, int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
+            protected:
+                void FigCreater() override;
+        }
 
     public:
         Symbol(int offset) : figure_kit_(0, 0), offset_(offset) {};
