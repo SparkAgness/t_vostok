@@ -15,7 +15,7 @@ class Symbol final
     private:
         Changeable_Array figure_kit_;
         int offset_;//means sequence of symbol at display
-
+        static inline int s_width_{15}; 
         class Symbol_Part
         {
             private:
@@ -97,10 +97,13 @@ class Symbol final
                 Changeable_Array coords_;
                 Symbol& parent_;
                 int sum_offset_;
-            public:
-                Vertical_Ln(Symbol& parent, int in_offset = X_MIDDLE) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;}
+                int width_; //width of the line, pxs
+            protected:
                 void Fig_Creater() override;
+            public:
+                Vertical_Ln(Symbol& parent, int in_offset = X_MIDDLE, int width = 5) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;}
                 void Seven_Creater();
+                void Zero_Creater(bool);
 	};
 
         class Horizontal_Ln final : protected Symbol_Part
@@ -109,10 +112,12 @@ class Symbol final
                 Changeable_Array coords_;
                 Symbol& parent_;
                 int sum_offset_;
+                int width_; //widht of the line, pxs
             public:
-                Horizontal_Ln(Symbol& parent, int in_offset = 7) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
+                Horizontal_Ln(Symbol& parent, int in_offset = 7, int width = 4) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;};
+                void Other_Line_Creater(bool);
             protected:
-                void FigCreater() override;
+                void FigCreater() override; //by default is middle line for "4" is created
         }
 
     public:

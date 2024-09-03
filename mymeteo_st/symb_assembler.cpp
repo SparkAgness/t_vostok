@@ -4,9 +4,27 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Symbol::Horizontal_Ln::Fig_Creater() override
+{
+    static_width = 15; //to send at Symbol's static var
+    int y_beg = Y_MIDDLE - width_/2, y_end = Y_MIDDLE + width_/2, x_beg = sum_offset_, x_end = sum_offset_ + static_width;
+};
+
+void Symbol::Vertical_Ln::Zero_Creater(bool by_left = true)
+//if by_left is true - there's left line created .| , false - there's right line = . |
+{
+    int x_beg_end[2];
+    int y_beg = 2, y_end = Y_MIDDLE * 2;
+    if (by_left) {*x_beg_end = sum_offset_; *(x_beg_end + 1) =  *(sum_offset_) + width_;}
+    else {*x_beg_end = sum_offset + 2*width_; *(x_beg_end + 1) = *(x_beg_end) + width_;}
+    for (int y = y_beg; y <= y_end; ++y) {
+        for (int x = *(x_beg_end); x <= *(x_beg_end + 1); ++x) {int tmp[2] {x, y}; coords_.PushBack(tmp);}
+    }
+};
+
 void Symbol::Vertical_Ln::Seven_Creater()
 {
-    int y_beg = Y_MIDDLE - 8, y_end = Y_MIDDLE*2, x_beg = X_MIDDLE + 7, x_end = X_MIDDLE - 7, i = 0;
+    int y_beg = Y_MIDDLE - 8, y_end = Y_MIDDLE*2, x_beg = sum_offset_ + X_MIDDLE + 7, x_end = sum_offset_ + X_MIDDLE - 7, i = 0;
     for (int y = y_beg; y <= y_end; ++y) {
         for (int x = x_end - i; x >= x_beg; --x) {
             tmp[2] {x, y};
