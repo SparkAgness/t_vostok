@@ -117,8 +117,8 @@ class Symbol final
                 Horizontal_Ln(Symbol& parent, int in_offset = 7, int width = 4) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;};
                 void Other_Line_Creater(bool);
             protected:
-                void FigCreater() override; //by default is middle line for "4" is created
-        }
+                void Fig_Creater() override; //by default is middle line for "4" is created
+        };
 
     public:
         Symbol(int offset) : figure_kit_(0, 0), offset_(offset) {};

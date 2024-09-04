@@ -4,10 +4,22 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
-void Symbol::Horizontal_Ln::Fig_Creater() override
+void Symbol::Horizontal_Ln::Other_Line_Creater(bool up = true) //by default is up-side line
 {
-    static_width = 15; //to send at Symbol's static var
-    int y_beg = Y_MIDDLE - width_/2, y_end = Y_MIDDLE + width_/2, x_beg = sum_offset_, x_end = sum_offset_ + static_width;
+    y_beg_end[2] {};
+    if (up) { *y_beg_end = 2; *(y_beg_end + 1) = *y_beg_end + width_;} 
+    else {*y_beg_end = Y_MIDDLE*2 - width_; *(y_beg_end + 1) = Y_MIDDLE*2;}
+    for (int y = *y_beg_end; y <= *(y_beg_end + 1); ++y) {
+        for(int x = sum_offset_; x <= sum_offset_ + Symbol::s_width; ++x) {tmp[2] {x, y}; coords_.PushBack(tmp);}
+    }
+};
+
+void Symbol::Horizontal_Ln::Fig_Creater() override //horizontal line at the middle of field
+{
+    int y_beg = Y_MIDDLE - width_/2, y_end = Y_MIDDLE + width_/2, x_beg = sum_offset_, x_end = sum_offset_ + Symbol::s_width_;
+    for (int y = y_beg; y <= y_end; ++y) {
+        for (int x = x_beg; x <= x_end; ++x) {tmp[2] {x, y}; coords_.PushBack(tmp);}
+    }
 };
 
 void Symbol::Vertical_Ln::Zero_Creater(bool by_left = true)
