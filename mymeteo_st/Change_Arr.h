@@ -21,10 +21,31 @@ class Changeable_Array final
         int** GetCoord() const; //OK
         int GetLenght() const; //OK
         void PushBack(int*); //OK
-        void ChangeMember(int, int, bool);
+        void ChangeMember(int, int, bool); //OK
+        int MinMax_Index(bool, bool);
 };
 
-void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0)
+int Changeable_Array::MinMax_Index(bool x_max, bool y_max)
+//if x_max is true, method finds the max value of all 2-demensions array
+//if y_max is false, method finds the min value of 2-demensions array's member with finding x-coordinate
+//returns the number of 2-demensions array with defined terms of min/max
+{
+    int index = 0;
+    int& ind = index;
+    if (x_max) {
+        for (int i = 1; i < lenght_; ++i) {
+            if (*(*coord + i) > *(*coord + ind)) {ind = i;} 
+	} 
+    } else if (!x_max) {
+        for (int i = 1; i < lenght_; ++i) {
+            if (*(*coord + i) < *(*coord + ind)) {ind = i;}
+        }
+    }
+
+    //to be continiued...
+};
+
+void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0
 {
     if (second_column) {
         *(*(coord_ + mem_numb) + 1) = value;

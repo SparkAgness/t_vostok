@@ -21,6 +21,14 @@ class Symbol final
             private:
 
             protected:
+                void Erase_Corner(int corner, int rows) 
+                //corner allows 1 - left_up corner and further above clockwise (2, 3, 4)
+		//rows 1 to 2, 1 - one corner's cell will be erased, 2 - three corner's cells will be erased
+                {
+			// first of all I need in min/max founding method in Changeable_Array class!!!!
+
+		};
+
                 virtual void Rotate_AgainstCW(int) = 0;
                 virtual void Fig_Creater() = 0;
                 virtual void Mirror(bool, bool) = 0;
