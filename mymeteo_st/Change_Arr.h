@@ -8,6 +8,9 @@ class Changeable_Array final
     private:
         int** coord_;//
 	int lenght_;
+        int MinMax(bool, bool);//OK
+        int** Coord_Array();
+	//after using **Coord_Array it is necessary to delete pointer and free the heap!!!
 
     public:
         Changeable_Array(int, int); //OK
@@ -22,27 +25,49 @@ class Changeable_Array final
         int GetLenght() const; //OK
         void PushBack(int*); //OK
         void ChangeMember(int, int, bool); //OK
-        int MinMax_Index(bool, bool);
+        void Eraser(bool*);
 };
 
-int Changeable_Array::MinMax_Index(bool x_max, bool y_max)
-//if x_max is true, method finds the max value of all 2-demensions array
-//if y_max is false, method finds the min value of 2-demensions array's member with finding x-coordinate
-//returns the number of 2-demensions array with defined terms of min/max
+int** Changeable_Array::Coord_Array()
+//returns array(int**) of coordinates to be erased by method Eraser()
+//array consists of coordinates: 0member - corner, 1member - left/right, 2member - up/down
+{
+    int** arr = new int* [3] {};
+    for (int i = 0; i < 3; ++i) {*(arr + i) = new int [2];} 
+
+};
+
+void Changeable_Array::Eraser(bool* er_arr) 
+//bool er_arr[5] {left_up, right_up, right_down, left_down, one_diagonal_row_erase}
+{
+
+};
+
+int Changeable_Array::MinMax(bool coord_x, bool maxim)
+//if coord_x is true, finds x, else - finds y
+//if max is true, finds maximum, else - minimum
+//returns set value of min/max of x/y
 {
     int index = 0;
     int& ind = index;
-    if (x_max) {
+    if (coord_x) {
         for (int i = 1; i < lenght_; ++i) {
-            if (*(*coord + i) > *(*coord + ind)) {ind = i;} 
-	} 
-    } else if (!x_max) {
-        for (int i = 1; i < lenght_; ++i) {
-            if (*(*coord + i) < *(*coord + ind)) {ind = i;}
+            if (maxim) { 
+                if (*(*(coord_ + i)) > *(*(coord_ + ind))) {ind = i;} 
+            } else if (!maxim) {
+                if (*(*(coord_ + i)) < *(*(coord_ + ind))) {ind = i;}
+            }
         }
+    } else if (!coord_x) {
+        for (int i = 1; i < lenght_; ++i) {
+            if (maxim) {
+                if (*(*(coord_ + i) + 1) > *(*(coord_ + index) + 1)) {ind = i;}
+	    } else if (!maxim) {
+                if (*(*(coord_ + i) + 1) < *(*(coord_ + index) + 1)) {ind = i;}
+            }
+	}
     }
-
-    //to be continiued...
+    return index;
 };
 
 void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0
