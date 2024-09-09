@@ -9,8 +9,6 @@ class Changeable_Array final
         int** coord_;//
 	int lenght_;
         int MinMax(bool, bool);//OK
-        int** Coord_Array();
-	//after using **Coord_Array it is necessary to delete pointer and free the heap!!!
 
     public:
         Changeable_Array(int, int); //OK
@@ -18,35 +16,45 @@ class Changeable_Array final
         Changeable_Array(Changeable_Array &&); //OK
         Changeable_Array& operator=(const Changeable_Array&); //OK
         Changeable_Array& operator=(Changeable_Array&&); //OK
-        ~Changeable_Array() {delete *coord_;}; //OK
+        ~Changeable_Array() {for (int i = 0; i < lenght_; ++ i) {delete [] coord_[i];}}; //OK
 
         int* CoordValues(int) const;//OK
         int** GetCoord() const; //OK
         int GetLenght() const; //OK
         void PushBack(int*); //OK
         void ChangeMember(int, int, bool); //OK
-        void Eraser(bool*);
+	int MinMax_Cell(bool, bool, int);
 };
 
-int** Changeable_Array::Coord_Array()
-//returns array(int**) of coordinates to be erased by method Eraser()
-//array consists of coordinates: 0member - corner, 1member - left/right, 2member - up/down
+int Chabgeable_Array::MinMax_Cell(bool maxi, bool x, int ind)
+//if maxi=true, finds maximum
+//if x=true, finds x
+//ind = MinMax(x, y) from private-part or other value of coord_'s index
 {
-    int** arr = new int* [3] {};
-    for (int i = 0; i < 3; ++i) {*(arr + i) = new int [2];} 
+    int index = 0;
+    int& indx = index;
+    if(x) {
+        int val = *(CoordValues(ind) + 1);
+        if (maxi) {
+            for (int i = 0; i < lenght_; ++i) {
+                if (*(CoordValues(i) + 1) == val && *CoordValues(i) > *CoordValues(indx)) indx = i;
+            }
+        } else if (!maxi) {
+            for (int i = 0; i < lenght_; ++i) {
+                if (*(CoordValues(i) + 1) == val && *CoordValues(i) < *CoordValues(indx)) indx = i;
+            }
+        }
+    } else if(!x) {
+        int val = *CoordValues(ind);
 
-};
-
-void Changeable_Array::Eraser(bool* er_arr) 
-//bool er_arr[5] {left_up, right_up, right_down, left_down, one_diagonal_row_erase}
-{
-
+    }
+    return index;
 };
 
 int Changeable_Array::MinMax(bool coord_x, bool maxim)
 //if coord_x is true, finds x, else - finds y
 //if max is true, finds maximum, else - minimum
-//returns set value of min/max of x/y
+//returns member's index of set value of min/max of x/y
 {
     int index = 0;
     int& ind = index;

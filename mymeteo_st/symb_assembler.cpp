@@ -4,6 +4,15 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Symbol::Fill_Erase_Array(int choose_corner, bool one_row)
+//choose_corner = 1, left-up corner, 2 - right-up, 3 - right-down, 4 - left-down
+//one_row = true, erasing one cell, false - erasing three cells
+{
+    bool x, maxi;
+    if (x && maxi) 
+    coords_.MinMax(x, maxi);
+};
+
 void Symbol::Horizontal_Ln::Other_Line_Creater(bool up = true) //by default is up-side line
 {
     y_beg_end[2] {};
