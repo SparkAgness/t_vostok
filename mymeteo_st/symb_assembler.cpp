@@ -8,9 +8,28 @@ void Symbol::Fill_Erase_Array(int choose_corner, bool one_row)
 //choose_corner = 1, left-up corner, 2 - right-up, 3 - right-down, 4 - left-down
 //one_row = true, erasing one cell, false - erasing three cells
 {
-    bool x, maxi;
-    if (x && maxi) 
-    coords_.MinMax(x, maxi);
+    bool x_maxi, y_maxi; //x_maxi=true - finds x maximum, y_max - the same as x_max
+    switch choose_corner {
+        case 1: x_maxi = false; y_maxi = false; break;
+	case 2: x_maxi = true; y_maxi = false; break;
+        case 3: x_maxi = true; y_maxi = true; break;
+        case 4: x_maxi = false; y_maxi = true; break;
+    }
+    int in = coords_.MinMax(true, x_maxi);
+    int push_in = coords_.MinMax_Cell(y_maxi, false, in);
+    Chaneable_Array one(push_in, 0); 
+    erase_array_ = one;
+    if (!one_row) {
+        int f_x = *(coords_.CoordValues(push_in));
+        int f_y = *(coords_.CoordValues(push_in) + 1);
+        switch choose_corner {
+            case 1: int tmp[2] {coords_.Finding_Index(f_x + 1, f_y), coords_.Finding_Index(f_x, f_y + 1)}; break;
+            case 2:
+            case 3:
+            case 4:
+        }
+        erase_array_.PushBack(tmp);
+    }
 };
 
 void Symbol::Horizontal_Ln::Other_Line_Creater(bool up = true) //by default is up-side line

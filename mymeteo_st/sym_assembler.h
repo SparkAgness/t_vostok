@@ -28,7 +28,8 @@ class Symbol final
 			// first of all I need in min/max founding method in Changeable_Array class!!!!
 
 		};
-                Changeable_Array erase_array_(0, 0);
+                Changeable_Array erase_array_(0, 0); //after Fill_Erase_Array it appears at dyn_array with 1st member - corner coordinate's number in coords_
+						     //and 2nd member (optionally) with 2nd and 3d coordinate's numbers in coords_
                 void Fill_Erase_Arrray(int, bool);
                 virtual void Rotate_AgainstCW(int) = 0;
                 virtual void Fig_Creater() = 0;

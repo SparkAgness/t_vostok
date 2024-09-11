@@ -8,7 +8,6 @@ class Changeable_Array final
     private:
         int** coord_;//
 	int lenght_;
-        int MinMax(bool, bool);//OK
 
     public:
         Changeable_Array(int, int); //OK
@@ -23,12 +22,21 @@ class Changeable_Array final
         int GetLenght() const; //OK
         void PushBack(int*); //OK
         void ChangeMember(int, int, bool); //OK
-	int MinMax_Cell(bool, bool, int);
+        int MinMax(bool, bool);//OK
+	int MinMax_Cell(bool, bool, int);//
+        int Finding_Index(int, int);
+};
+
+int Changeable_Array::Finding_Index(int x, int y)
+{
+    for (int i = 0; i < lenght_; ++i) {
+        if ((x == *(*coord_ + i)) && (y == *(*(coord_ + i) + 1))) return i;
+    }
 };
 
 int Chabgeable_Array::MinMax_Cell(bool maxi, bool x, int ind)
-//if maxi=true, finds maximum
-//if x=true, finds x
+//if maxi=true, finds second's coord maximum
+//if x=true, finds x as second coord
 //ind = MinMax(x, y) from private-part or other value of coord_'s index
 {
     int index = 0;
@@ -46,6 +54,15 @@ int Chabgeable_Array::MinMax_Cell(bool maxi, bool x, int ind)
         }
     } else if(!x) {
         int val = *CoordValues(ind);
+	if (maxi) {
+            for (int i = 0; i < lenght_; ++i) {
+                if ((*CoordValues(i) == val) && *(CoordValues(i) + 1) > *(CoordValues(indx) + 1)) indx = i;
+            }
+        } else if (!maxi) {
+            for (int i = 0; i < lenght_; ++i) {
+                if (*CoordValues(i) == i && *(CoordValues(i) + 1) < *(CoordValues(indx) + 1)) indx = i; 
+            }
+        }
 
     }
     return index;
@@ -78,7 +95,7 @@ int Changeable_Array::MinMax(bool coord_x, bool maxim)
     return index;
 };
 
-void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0
+void Changeable_Array::ChangeMember(int mem_numb, int  value, bool second_column = 0)
 {
     if (second_column) {
         *(*(coord_ + mem_numb) + 1) = value;
