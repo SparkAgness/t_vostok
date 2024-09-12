@@ -21,16 +21,14 @@ class Symbol final
             private:
                 Changeable_Array coords_(0, 0);
             protected:
-                void Erase_Corner(int corner, int rows) 
+                void Erase_Corner(int corner, bool rows);
                 //corner allows 1 - left_up corner and further above clockwise (2, 3, 4)
-		//rows 1 to 2, 1 - one corner's cell will be erased, 2 - three corner's cells will be erased
-                {
-			// first of all I need in min/max founding method in Changeable_Array class!!!!
+		//rows 1 to 2, false - one corner's cell will be erased, true - three corner's cells will be erased
 
-		};
                 Changeable_Array erase_array_(0, 0); //after Fill_Erase_Array it appears at dyn_array with 1st member - corner coordinate's number in coords_
 						     //and 2nd member (optionally) with 2nd and 3d coordinate's numbers in coords_
-                void Fill_Erase_Arrray(int, bool);
+
+                void Fill_Erase_Arrray(int, bool); //OK
                 virtual void Rotate_AgainstCW(int) = 0;
                 virtual void Fig_Creater() = 0;
                 virtual void Mirror(bool, bool) = 0;

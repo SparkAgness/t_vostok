@@ -4,6 +4,20 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Erase_Corner(int corner, bool rows)
+{
+    Fill_Erase_Array(corner, rows);
+    coords_.ChangeMember(**erase_array_, 0, false);
+    coords_.ChangeMember(**erase_array_, 0, true);
+    if (rows) {
+        coords_.ChangeMember(*(*erase_array_ + 1), 0, false);
+        coords_.ChangeMember(*(*erase_array_ + 1), 0, true);
+        coords_.ChangeMember(*(*(erase_array_ + 1) + 1), 0, false);
+        coords_.ChangeMember(*(*(erase_array_ + 1) + 1), 0, true);
+    }
+
+};
+
 void Symbol::Fill_Erase_Array(int choose_corner, bool one_row)
 //choose_corner = 1, left-up corner, 2 - right-up, 3 - right-down, 4 - left-down
 //one_row = true, erasing one cell, false - erasing three cells
@@ -24,9 +38,9 @@ void Symbol::Fill_Erase_Array(int choose_corner, bool one_row)
         int f_y = *(coords_.CoordValues(push_in) + 1);
         switch choose_corner {
             case 1: int tmp[2] {coords_.Finding_Index(f_x + 1, f_y), coords_.Finding_Index(f_x, f_y + 1)}; break;
-            case 2:
-            case 3:
-            case 4:
+            case 2: int tmp[2] {coords_.Finding_Index(f_x - 1, f_y), coords_.Finding_Index(f_x, f_y + 1)}; break;
+            case 3: int tmp[2] {coords_.Finding_Index(f_x, f_y - 1), coords_.Finding_Index(f_x - 1, f_y)}; break;
+            case 4: int tmp[2] {coords_.Finding_Index(f_x - 1, f_y), coords_.Finding_Index(f_x, f_y - 1)}; break;
         }
         erase_array_.PushBack(tmp);
     }
