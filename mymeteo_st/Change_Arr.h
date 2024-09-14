@@ -32,9 +32,10 @@ int Changeable_Array::Finding_Index(int x, int y)
     for (int i = 0; i < lenght_; ++i) {
         if ((x == *(*coord_ + i)) && (y == *(*(coord_ + i) + 1))) return i;
     }
+    return 0;
 };
 
-int Chabgeable_Array::MinMax_Cell(bool maxi, bool x, int ind)
+int Changeable_Array::MinMax_Cell(bool maxi, bool x, int ind)
 //if maxi=true, finds second's coord maximum
 //if x=true, finds x as second coord
 //ind = MinMax(x, y) from private-part or other value of coord_'s index
