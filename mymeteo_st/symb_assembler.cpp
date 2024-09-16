@@ -1,12 +1,21 @@
 #include <exception>
 #include "sym_assembler.h"
+#include "Change_Arr.h"
 
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+void Symbol::Two()
+{
+
+};
+
 void Symbol::One()
 {
- 
+    Vertical_Ln For_One(*this);
+    For_One.Fig_Creater();
+    For_One.Erase_Corner(1, true);
+    figure_kit_ = *(For_One.GetCoord());
 };
 
 void Symbol::Symbol_Part::Erase_Corner(int corner, bool rows)

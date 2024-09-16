@@ -21,7 +21,7 @@ class Symbol final
         {
             private:
                 Changeable_Array coords_;
-            protected:
+            public:
                 void Erase_Corner(int, bool);
                 //corner allows 1 - left_up corner and further above clockwise (2, 3, 4)
 		//rows 1 to 2, false - one corner's cell will be erased, true - three corner's cells will be erased
@@ -38,14 +38,14 @@ class Symbol final
                 virtual ~Symbol_Part();
         };
 
-        class Corner final : protected Symbol_Part
+        class Corner final : public Symbol_Part
         {
             private:
                 Changeable_Array coords_;
                 Symbol& parent_;
                 int side_;
                 int sum_offset_; //consists of this->offset + inside offset (by default is 7)
-            protected:
+            public:
                 void Rotate_AgainstCW(int yield = 1) override
                 {
                     int len = coords_.GetLenght();
@@ -77,7 +77,7 @@ class Symbol final
             void DownCorner();
         };
 
-        class Up_QuartCircle final : protected Symbol_Part
+        class Up_QuartCircle final : public Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -118,7 +118,7 @@ class Symbol final
                 };
         };
 
-        class Central_Point final : protected Symbol_Part
+        class Central_Point final : public Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -126,7 +126,7 @@ class Symbol final
                 int sum_offset_;
             public:
                 Central_Point(Symbol& parent, int in_offset = X_MIDDLE - 1) : coords_(0, 0), sum_offset_(in_offset), parent_(parent) {sum_offset_ += parent_.offset_;};
-            protected:
+            public:
                 void Fig_Creater() override
                 {
                     int y_beg = Y_MIDDLE, y_end = Y_MIDDLE + 1, x_beg = sum_offset_, x_end = sum_offset_ + 3;
@@ -137,7 +137,7 @@ class Symbol final
 
         };
 
-        class Down_QuartCircle final : protected Symbol_Part
+        class Down_QuartCircle final : public Symbol_Part
 	{
             private:
                 Changeable_Array coords_;
@@ -160,14 +160,16 @@ class Symbol final
 	        }
 	};
 
-        class Vertical_Ln final : protected Symbol_Part
+        class Vertical_Ln final : public Symbol_Part
 	{
             private:
                 Changeable_Array coords_;
                 Symbol& parent_;
                 int sum_offset_;
                 int width_; //width of the line, pxs
-            protected:
+            public:
+                void Rotate_AgainstCW(int) override {};
+                void Mirror(bool, bool) override {}; 
                 void Fig_Creater() override
                 {
                     int y_beg = 2, y_end = Y_MIDDLE*2, x_beg = sum_offset_ + X_MIDDLE - 2, x_end = sum_offset_ + X_MIDDLE + 2;
@@ -175,13 +177,14 @@ class Symbol final
                         for (int x = x_beg; x <= x_end; ++x) {int tmp[2] {x, y}; coords_.PushBack(tmp);}
                     }
                 };
-       public:
+            public:
                 Vertical_Ln(Symbol& parent, int in_offset = X_MIDDLE, int width = 5) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;}
                 void Seven_Creater();
                 void Zero_Creater(bool);
+                Changeable_Array* GetCoord() {return &coords_;};
 	};
 
-        class Horizontal_Ln final : protected Symbol_Part
+        class Horizontal_Ln final : public Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -191,7 +194,7 @@ class Symbol final
             public:
                 Horizontal_Ln(Symbol& parent, int in_offset = 7, int width = 4) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;};
                 void Other_Line_Creater(bool);
-            protected:
+            public:
                 void Fig_Creater() override //by default is middle line for "4" is created
                 {
                     int y_beg = Y_MIDDLE - width_/2, y_end = Y_MIDDLE + width_/2, x_beg = sum_offset_, x_end = sum_offset_ + Symbol::s_width_;
@@ -204,7 +207,9 @@ class Symbol final
     public:
         Symbol(int offset) : figure_kit_(0, 0), offset_{offset} {};
         static int Get_Swidth() {return Symbol::s_width_;};
+	Changeable_Array& Get_Array() const {return *this->figure_kit_;};
         void One();
+        void Two();
 
 };
 
