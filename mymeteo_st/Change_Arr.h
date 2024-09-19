@@ -15,6 +15,8 @@ class Changeable_Array final
         Changeable_Array(Changeable_Array &&); //OK
         Changeable_Array& operator=(const Changeable_Array&); //OK
         Changeable_Array& operator=(Changeable_Array&&); //OK
+        const Changeable_Array& operator*() const;
+        Changeable_Array& operator*();
         ~Changeable_Array() {for (int i = 0; i < lenght_; ++ i) {delete [] coord_[i];}}; //OK
 
         int* CoordValues(int) const;//OK
@@ -23,7 +25,7 @@ class Changeable_Array final
         void PushBack(int*); //OK
         void ChangeMember(int, int, bool); //OK
         int MinMax(bool, bool);//OK
-	int MinMax_Cell(bool, bool, int);//
+        int MinMax_Cell(bool, bool, int);//
         int Finding_Index(int, int);
 };
 
@@ -31,7 +33,7 @@ int Changeable_Array::Finding_Index(int x, int y)
 {
     for (int i = 0; i < lenght_; ++i) {
         if ((x == *(*coord_ + i)) && (y == *(*(coord_ + i) + 1))) return i;
-    }
+        }
     return 0;
 };
 
@@ -177,6 +179,16 @@ Changeable_Array::Changeable_Array(const Changeable_Array& source)
     for (int i = 0; i < this->lenght_; ++i) {
         *(coord_ + i) = new int[2] {*(*(source.coord_ + i)), *(*(source.coord_ + i) + 1)};
     }
+};
+
+const Changeable_Array& Changeable_Array::operator*() const
+{
+    return *this;
+};
+
+Changeable_Array& Changeable_Array::operator*()
+{
+    return *this;
 };
 #endif
 

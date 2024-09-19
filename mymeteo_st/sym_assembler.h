@@ -207,7 +207,7 @@ class Symbol final
     public:
         Symbol(int offset) : figure_kit_(0, 0), offset_{offset} {};
         static int Get_Swidth() {return Symbol::s_width_;};
-	Changeable_Array& Get_Array() const {return *this->figure_kit_;};
+	Changeable_Array& Get_Array() {return *figure_kit_;};
         void One();
         void Two();
 
