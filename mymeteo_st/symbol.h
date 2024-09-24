@@ -28,7 +28,7 @@ class Symbol final
         void Draw_UpSector1(int); //OK
         void Draw_UpSector2(int); //OK
         void Draw_UpSector3(int); //OK
-        void Draw_UpSector4(int) //OK
+        void Draw_UpSector4(int); //OK
         void DrawTwo();
 
     public:
@@ -47,7 +47,7 @@ void Symbol::Draw_UpSector4(int offset)
         {
             case 11: for (int x = begin_board + IN_RAD - 1; x <= end_board - 1; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
             case 12: for (int x = begin_board; x <= end_board - 2; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
-	    case 13: for (int x = begin_board; x <= end_board - 4; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;} 
+	        case 13: for (int x = begin_board; x <= end_board - 4; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;} 
             default: for (int x = begin_board + IN_RAD; x <= end_board; ++x) {tmp[2] {x, y}; this->coord_kit_.PushBack(tmp); break;}
        }
     }

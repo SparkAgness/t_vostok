@@ -7,7 +7,7 @@ class Changeable_Array final
 {
     private:
         int** coord_;//
-	int lenght_;
+	    int lenght_;
 
     public:
         Changeable_Array(int, int); //OK
