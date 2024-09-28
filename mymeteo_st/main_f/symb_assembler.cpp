@@ -102,4 +102,3 @@ void Symbol::Corner::DownCorner()
     }
 };
 
-

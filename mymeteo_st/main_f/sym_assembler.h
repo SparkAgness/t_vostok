@@ -4,9 +4,9 @@
 #define SYMBASSEMBLY
 
 #include <iostream>
-#include "Change_Arr.h"
 #include <string>
 #include "Errors.h"
+#include "Change_Arr.h"
 
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
@@ -34,12 +34,11 @@ class Symbol final
                 virtual void Rotate_AgainstCW(int) = 0;
                 virtual void Fig_Creater() = 0;
                 virtual void Mirror(bool, bool) = 0;
-            public:
-                Symbol_Part();
-                virtual ~Symbol_Part();
+                Symbol_Part() : coords_() {};
+                virtual ~Symbol_Part() {};
         };
 
-        class Corner final : public Symbol_Part
+        class Corner final : public virtual Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -72,13 +71,11 @@ class Symbol final
                         }
                     }
                 };
-
-            public:
                 Corner(Symbol& parent, int side = 4, int in_offset = 7) : coords_(0, 0), parent_(parent), side_(side), sum_offset_(in_offset) {sum_offset_ += parent.offset_;};
                 void DownCorner();
         };
 
-        class Up_QuartCircle final : public Symbol_Part
+        class Up_QuartCircle final : public virtual Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -119,7 +116,7 @@ class Symbol final
                 };
         };
 
-        class Central_Point final : public Symbol_Part
+        class Central_Point final : public virtual Symbol_Part
         {
             private:
                 Changeable_Array coords_;
@@ -138,7 +135,7 @@ class Symbol final
 
         };
 
-        class Down_QuartCircle final : public Symbol_Part
+        class Down_QuartCircle final : public virtual Symbol_Part
 	{
             private:
                 Changeable_Array coords_;
@@ -161,7 +158,7 @@ class Symbol final
 	        }
 	};
 
-        class Vertical_Ln final : public Symbol_Part
+        class Vertical_Ln final : public virtual Symbol_Part
 	{
             private:
                 Changeable_Array coords_;
@@ -185,7 +182,7 @@ class Symbol final
                 Changeable_Array* GetCoord() {return &coords_;};
 	};
 
-        class Horizontal_Ln final : public Symbol_Part
+        class Horizontal_Ln final : public virtual Symbol_Part
         {
             private:
                 Changeable_Array coords_;

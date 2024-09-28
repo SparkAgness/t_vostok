@@ -2,6 +2,7 @@
 #define OLED
 #define DEBUG
 
+
 #ifndef DEBUG 
     #include "SSD1306Wire.h"
 #elifdef DEBUG
@@ -35,7 +36,8 @@ void Number::Drawing() const
         #ifndef DEBUG
             tmp_wire_.setPixel(*(pt.CoordValues(i)), *(pt.CoordValues(i) + 1));
         #elifdef DEBUG
-            std::cout << *(pt.CoordValues(i)) << ", " << *(pt.CoordValues(i) + 1) << std::endl;
+//            std::cout << *(pt.CoordValues(i)) << ", " << *(pt.CoordValues(i) + 1) << std::endl;
+	    std::cout << "jd" << std::endl;
         #endif
     }
 };
