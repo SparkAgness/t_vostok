@@ -5,7 +5,8 @@
 
 #ifndef DEBUG 
     #include "SSD1306Wire.h"
-#elifdef DEBUG
+#endif
+#ifdef DEBUG
     #include <iostream> 
 #endif
 
@@ -21,7 +22,8 @@ class Number final
     public:
         #ifndef DEBUG
             Number(Symbol& numb, SSD1306Wire& tmp_wire) : numb_(numb), tmp_wire_(tmp_wire) {};
-        #elifdef DEBUG
+        #endif
+        #ifdef DEBUG
             Number(Symbol& numb) : numb_(numb) {};
         #endif
         void Drawing() const;
@@ -35,7 +37,8 @@ void Number::Drawing() const
     for (int i = 0; i < pt_size; ++i) {
         #ifndef DEBUG
             tmp_wire_.setPixel(*(pt.CoordValues(i)), *(pt.CoordValues(i) + 1));
-        #elifdef DEBUG
+        #endif
+        #ifdef DEBUG
 //            std::cout << *(pt.CoordValues(i)) << ", " << *(pt.CoordValues(i) + 1) << std::endl;
 	    std::cout << "jd" << std::endl;
         #endif
