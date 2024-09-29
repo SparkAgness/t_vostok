@@ -7,11 +7,14 @@ int main()
 {
     std::cout << "pre-main" << std::endl;
     Symbol VLine(0);
-    VLine.One();
-    Symbol &one(VLine);
+    /*Symbol &one(VLine);
     Number Ein(one);
     Ein.Drawing();
     std::cout.flush();
     std::cout << "main" << std::endl;
+    */
+    Changeable_Array& Tmp {*(*(VLine.Get_Private_Part()))};
+    std::cout << *(Tmp.CoordValues(4)) << std::endl;
+    //std::cout << *(Tmp.CoordValues(3)) << *(Tmp.CoordValues(3) + 1) << std::endl;
 };
 

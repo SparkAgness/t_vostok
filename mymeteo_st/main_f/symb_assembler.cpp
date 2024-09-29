@@ -4,6 +4,13 @@
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
+Changeable_Array& Symbol::Get_Private_Part()
+{
+    Corner corn(*this);
+    corn.Fig_Creater();
+    return corn.Get_Coords();
+};
+
 void Symbol::Two()
 {
 

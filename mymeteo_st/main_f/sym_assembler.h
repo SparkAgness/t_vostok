@@ -46,6 +46,7 @@ class Symbol final
                 int side_;
                 int sum_offset_; //consists of this->offset + inside offset (by default is 7)
             public:
+                virtual void Mirror(bool, bool) {}; 
                 void Rotate_AgainstCW(int yield = 1) override
                 {
                     int len = coords_.GetLenght();
@@ -73,6 +74,7 @@ class Symbol final
                 };
                 Corner(Symbol& parent, int side = 4, int in_offset = 7) : coords_(0, 0), parent_(parent), side_(side), sum_offset_(in_offset) {sum_offset_ += parent.offset_;};
                 void DownCorner();
+                Changeable_Array& Get_Coords() {return *coords_;};
         };
 
         class Up_QuartCircle final : public virtual Symbol_Part
@@ -206,6 +208,7 @@ class Symbol final
         Symbol(int offset) : figure_kit_(0, 0), offset_{offset} {};
         static int Get_Swidth() {return Symbol::s_width_;};
 	Changeable_Array& Get_Array() {return *figure_kit_;};
+        Changeable_Array& Get_Private_Part();
         void One();
         void Two();
 

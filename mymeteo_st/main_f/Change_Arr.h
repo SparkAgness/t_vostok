@@ -1,13 +1,14 @@
 #ifndef CHANGE_ARR
 #define CHANGE_ARR
 
+#include <iostream>
 #include <algorithm>
 
 class Changeable_Array final
 {
     private:
         int** coord_;//
-	    int lenght_;
+        int lenght_;
 
     public:
 /*
@@ -120,7 +121,6 @@ class Changeable_Array final
             *(coord + this->lenght_ - 1) = new int[2] {*(push), *(push + 1)};
             for (int i = 0; i < this->lenght_ - 1; ++i) {delete [] *(this->coord_ + i);}
             this->coord_ = coord;
-            for (int i = 0; i < this->lenght_; ++i) {delete [] *(coord + i);}
         };
 
         int GetLenght() const
