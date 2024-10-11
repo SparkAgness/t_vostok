@@ -1,14 +1,19 @@
 #include <exception>
+#include <memory>
 #include "sym_assembler.h"
 
 #define X_MIDDLE 14
 #define Y_MIDDLE 13
 
-Changeable_Array& Symbol::Get_Private_Part()
+void Symbol::Make_Shared_Pointer(Changeable_Array& source)
 {
-    Corner corn(*this);
-    corn.Fig_Creater();
-    return corn.Get_Coords();
+    std::shared_ptr<Changeable_Array> tmp {std::make_shared<Changeable_Array>(source)}; 
+    std::swap(figure_kit_, tmp);
+};
+
+std::shared_ptr<Changeable_Array> Symbol::Get_Coords_Obj()
+{
+    return figure_kit_;
 };
 
 void Symbol::Two()
@@ -21,7 +26,7 @@ void Symbol::One()
     Vertical_Ln For_One(*this);
     For_One.Fig_Creater();
     For_One.Erase_Corner(1, true);
-    figure_kit_ = *(For_One.GetCoord());
+    Make_Shared_Pointer(*(For_One.GetCoord()));
 };
 
 void Symbol::Symbol_Part::Erase_Corner(int corner, bool rows)
@@ -52,7 +57,8 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
     int in = coords_.MinMax(true, x_maxi);
     int push_in = coords_.MinMax_Cell(y_maxi, false, in);
     Changeable_Array one(push_in, 0); 
-    erase_array_ = one;
+    
+    //erase_array_ = one;
     if (!one_row) {
         int f_x = *(coords_.CoordValues(push_in));
         int f_y = *(coords_.CoordValues(push_in) + 1);

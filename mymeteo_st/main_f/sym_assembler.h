@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 #include "Errors.h"
 #include "Change_Arr.h"
 
@@ -14,7 +15,7 @@
 class Symbol final
 {
     private:
-        Changeable_Array figure_kit_;
+        std::shared_ptr<Changeable_Array> figure_kit_;
         int offset_;//means sequence of symbol at display
         static inline int s_width_{15}; 
 
@@ -74,7 +75,7 @@ class Symbol final
                 };
                 Corner(Symbol& parent, int side = 4, int in_offset = 7) : coords_(0, 0), parent_(parent), side_(side), sum_offset_(in_offset) {sum_offset_ += parent.offset_;};
                 void DownCorner();
-                Changeable_Array& Get_Coords() {return *coords_;};
+                Changeable_Array& Get_Coords() {return coords_;};
         };
 
         class Up_QuartCircle final : public virtual Symbol_Part
@@ -205,13 +206,13 @@ class Symbol final
          };
 
     public:
-        Symbol(int offset) : figure_kit_(0, 0), offset_{offset} {};
+        Symbol(int offset) : offset_{offset} {};
         static int Get_Swidth() {return Symbol::s_width_;};
 	Changeable_Array& Get_Array() {return *figure_kit_;};
-        Changeable_Array& Get_Private_Part();
+	std::shared_ptr<Changeable_Array> Get_Coords_Obj();
         void One();
         void Two();
-
+        void Make_Shared_Pointer(Changeable_Array&);
 };
 
 

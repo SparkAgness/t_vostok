@@ -9,6 +9,7 @@ int main()
     One.PushBack(tmp);
     std::cout << *(One.CoordValues(0)) << ", " << *(One.CoordValues(0) + 1) << " lenght is: " << One.GetLenght() << std::endl;
     std::cout << *(One.CoordValues(1)) << ", " << *(One.CoordValues(1) + 1) << " lenght is: " << One.GetLenght() << std::endl;
-   
+    std::cout << *(*(One.GetCoord())) << *(*(One.GetCoord()) + 1) << std::endl;
+    //CoordValues() and GetCoord() is working methods!!!
 
 }
