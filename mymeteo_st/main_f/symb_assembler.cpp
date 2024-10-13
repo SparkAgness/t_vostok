@@ -25,7 +25,7 @@ void Symbol::One()
 {
     Vertical_Ln For_One(*this);
     For_One.Fig_Creater();
-    For_One.Erase_Corner(1, true);
+    //For_One.Erase_Corner(1, true);
     Make_Shared_Pointer(*(For_One.GetCoord()));
 };
 
