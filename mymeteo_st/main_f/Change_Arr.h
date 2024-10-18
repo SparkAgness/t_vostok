@@ -22,10 +22,11 @@ class Changeable_Array final
         return 0;
         };
 
-        int MinMax_Cell(bool maxi, bool x, int ind)
+        int MinMax_Cell(bool x, bool maxi, int ind)
         //if maxi=true, finds second's coord maximum
         //if x=true, finds x as second coord
         //ind = MinMax(x, y) from private-part or other value of coord_'s index
+        //among_max - searching first value for minimum's comparing among cells with maximum value of first coord
         {
             int index = 0;
             int& indx = index;
@@ -33,24 +34,26 @@ class Changeable_Array final
                 int val = *(CoordValues(ind) + 1);
                 if (maxi) {
                     for (int i = 0; i < lenght_; ++i) {
-                        if (*(CoordValues(i) + 1) == val && *CoordValues(i) > *CoordValues(indx)) indx = i;
+                        if (*(CoordValues(i) + 1) == val && *CoordValues(i) > *CoordValues(indx)) {indx = i;}
                         }
                     } else if (!maxi) {
+                        indx = ind;
                         for (int i = 0; i < lenght_; ++i) {
-                            if (*(CoordValues(i) + 1) == val && *CoordValues(i) < *CoordValues(indx)) indx = i;
+                            if (*(CoordValues(i) + 1) == val && *CoordValues(i) < *CoordValues(indx)) {indx = i;}
                         }
                     }
             } else if(!x) {
                  int val = *CoordValues(ind);
 	         if (maxi) {
                     for (int i = 0; i < lenght_; ++i) {
-                        if ((*CoordValues(i) == val) && *(CoordValues(i) + 1) > *(CoordValues(indx) + 1)) indx = i;
+                        if ((*CoordValues(i) == val) && (*(CoordValues(i) + 1) > *(CoordValues(indx) + 1))) {indx = i;}
                     }
-                 } else if (!maxi) {
-                    for (int i = 0; i < lenght_; ++i) {
-                        if (*CoordValues(i) == i && *(CoordValues(i) + 1) < *(CoordValues(indx) + 1)) indx = i; 
+                    } else if (!maxi) {
+                        indx = ind;
+                        for (int i = 0; i < lenght_; ++i) {
+                            if (*CoordValues(i) == i && *(CoordValues(i) + 1) < *(CoordValues(indx) + 1)) {indx = i;}
+                        }
                     }
-                 }
             }
             return index;
         };
@@ -60,7 +63,7 @@ class Changeable_Array final
         //if max is true, finds maximum, else - minimum
         //returns member's index of set value of min/max of x/y
         {
-            int index = 0;
+            int index = 1;
             int& ind = index;
             if (coord_x) {
                 for (int i = 1; i < lenght_; ++i) {

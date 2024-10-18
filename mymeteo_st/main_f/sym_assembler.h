@@ -178,8 +178,7 @@ class Symbol final
                         for (int x = x_beg; x <= x_end; ++x) {int tmp[2] {x, y}; coords_.PushBack(tmp);}
                     }
                 };
-            public:
-                Vertical_Ln(Symbol& parent, int in_offset = X_MIDDLE, int width = 5) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;}
+                Vertical_Ln(Symbol& parent, int in_offset = 0, int width = 5) : coords_(0, 0), sum_offset_(in_offset), width_(width), parent_(parent) {sum_offset_ += parent_.offset_;}
                 void Seven_Creater();
                 void Zero_Creater(bool);
                 Changeable_Array* GetCoord() {return &coords_;};

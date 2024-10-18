@@ -47,7 +47,7 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
 //choose_corner = 1, left-up corner, 2 - right-up, 3 - right-down, 4 - left-down
 //one_row = true, erasing one cell, false - erasing three cells
 {
-    bool x_maxi, y_maxi; //x_maxi=true - finds x maximum, y_max - the same as x_max
+    bool x_maxi, y_maxi; //x_maxi=true - finds x maximum, y_max - the same as x_max but in relation to y
     switch (choose_corner) {
         case 1: x_maxi = false; y_maxi = false; break;
 	case 2: x_maxi = true; y_maxi = false; break;
@@ -55,7 +55,7 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
         case 4: x_maxi = false; y_maxi = true; break;
     }
     int in = coords_.MinMax(true, x_maxi);
-    int push_in = coords_.MinMax_Cell(y_maxi, false, in);
+    int push_in = coords_.MinMax_Cell(false, y_maxi, in);
     Changeable_Array one(push_in, 0); 
     
     //erase_array_ = one;
