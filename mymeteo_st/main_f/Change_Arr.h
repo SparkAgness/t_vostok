@@ -28,7 +28,7 @@ class Changeable_Array final
         //ind = MinMax(x, y) from private-part or other value of coord_'s index
         //among_max - searching first value for minimum's comparing among cells with maximum value of first coord
         {
-            int index = 0;
+            int index = ind;
             int& indx = index;
             if(x) {
                 int val = *(CoordValues(ind) + 1);
@@ -37,7 +37,6 @@ class Changeable_Array final
                         if (*(CoordValues(i) + 1) == val && *CoordValues(i) > *CoordValues(indx)) {indx = i;}
                         }
                     } else if (!maxi) {
-                        indx = ind;
                         for (int i = 0; i < lenght_; ++i) {
                             if (*(CoordValues(i) + 1) == val && *CoordValues(i) < *CoordValues(indx)) {indx = i;}
                         }
@@ -49,7 +48,6 @@ class Changeable_Array final
                         if ((*CoordValues(i) == val) && (*(CoordValues(i) + 1) > *(CoordValues(indx) + 1))) {indx = i;}
                     }
                     } else if (!maxi) {
-                        indx = ind;
                         for (int i = 0; i < lenght_; ++i) {
                             if (*CoordValues(i) == i && *(CoordValues(i) + 1) < *(CoordValues(indx) + 1)) {indx = i;}
                         }

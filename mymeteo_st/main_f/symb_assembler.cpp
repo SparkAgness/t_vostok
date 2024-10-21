@@ -25,13 +25,14 @@ void Symbol::One()
 {
     Vertical_Ln For_One(*this);
     For_One.Fig_Creater();
-    //For_One.Erase_Corner(1, true);
+    For_One.Erase_Corner(1, true);
     Make_Shared_Pointer(*(For_One.GetCoord()));
 };
 
 void Symbol::Symbol_Part::Erase_Corner(int corner, bool rows)
 {
     Fill_Erase_Array(corner, rows);
+    /*
     coords_.ChangeMember(*(erase_array_.CoordValues(0)), 0, false);
     coords_.ChangeMember(*(erase_array_.CoordValues(0)), 0, true);
     if (rows) {
@@ -40,6 +41,7 @@ void Symbol::Symbol_Part::Erase_Corner(int corner, bool rows)
         coords_.ChangeMember(*(erase_array_.CoordValues(1) + 1), 0, false);
         coords_.ChangeMember(*(erase_array_.CoordValues(1) + 1), 0, true);
     }
+    */
 
 };
 
@@ -49,7 +51,7 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
 {
     bool x_maxi, y_maxi; //x_maxi=true - finds x maximum, y_max - the same as x_max but in relation to y
     switch (choose_corner) {
-        case 1: x_maxi = false; y_maxi = false; break;
+        case 1: x_maxi = false; y_maxi = false; break; //in this case MinMax() finds (0, 0) pair
 	case 2: x_maxi = true; y_maxi = false; break;
         case 3: x_maxi = true; y_maxi = true; break;
         case 4: x_maxi = false; y_maxi = true; break;
@@ -57,9 +59,10 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
     int in = coords_.MinMax(true, x_maxi);
     int push_in = coords_.MinMax_Cell(false, y_maxi, in);
     Changeable_Array one(push_in, 0); 
-    
-    //erase_array_ = one;
-    if (!one_row) {
+    std::cout << coords_.GetLenght() << std::endl; //testing
+    std::cout << *(coords_.CoordValues(0)) << " " << *(coords_.CoordValues(0) + 1) << std::endl;//testing
+    std::cout << *(one.CoordValues(0)) << " " << *(one.CoordValues(0) + 1) << std::endl; //testing
+    /*if (!one_row) {
         int f_x = *(coords_.CoordValues(push_in));
         int f_y = *(coords_.CoordValues(push_in) + 1);
         switch (choose_corner) {
@@ -69,6 +72,7 @@ void Symbol::Symbol_Part::Fill_Erase_Array(int choose_corner, bool one_row)
             case 4: {int tmp[2] {coords_.Finding_Index(f_x - 1, f_y), coords_.Finding_Index(f_x, f_y - 1)}; erase_array_.PushBack(tmp); break;}
         }
     }
+    */
 };
 
 void Symbol::Horizontal_Ln::Other_Line_Creater(bool up = true) //by default is up-side line
