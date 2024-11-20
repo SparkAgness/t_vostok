@@ -15,7 +15,7 @@ int main()
     std::cout << "From 2nd PushBack: " << a.GetLastCoord(true) << " " << a.GetLastCoord(false) << std::endl;
     std::cout << a.TestLeftRight() << std::endl;
     std::cout << a.GetFirstCoord(true) << " " << a.GetFirstCoord(false) << std::endl;
-    std::cout << a.GetIndexCoord(true, 2) << " " << a.GetIndexCoord(false, 2) << std::endl;
+    std::cout << a.GetIndexCoord(true, 3) << " " << a.GetIndexCoord(false, 3) << std::endl;
     //a.GetIndexCoord(false, 2);
     
 }

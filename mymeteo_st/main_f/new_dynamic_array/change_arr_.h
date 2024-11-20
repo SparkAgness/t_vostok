@@ -98,7 +98,7 @@ namespace changeable_array
         ArrNode last_;
 
         public:
-            Array(int x, int y) : first_(x, y), last_(0, 0, first_)
+            Array(int x, int y) : first_(x, y), last_(0, 0)
             {
                 //ArrNode first_(x, y);
                 //ArrNode last_;
