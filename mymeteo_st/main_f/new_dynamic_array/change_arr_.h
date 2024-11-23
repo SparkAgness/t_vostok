@@ -111,7 +111,7 @@ namespace changeable_array
             void PushBack(int, int);
             int GetFirstCoord(bool) const;
             int GetLastCoord(bool) const;
-            int GetIndexCoord(bool, int) const;
+            int GetIndexCoord(bool, int);
             int TestLeftRight();
 
     };
