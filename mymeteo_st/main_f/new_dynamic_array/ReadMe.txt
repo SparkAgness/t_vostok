@@ -1,1 +1,1 @@
-It is necessary to create two members - first and last members pointers (ArrNode arrray_.first and ArrNode array_.last)
+first->right and last->left aren't changed to debug pushback

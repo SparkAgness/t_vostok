@@ -65,14 +65,14 @@ namespace changeable_array
                         return *this;
 		            };
 
-                    void SetBackLink(ArrNode& left)
+                    void SetBackLink(std::shared_ptr<ArrNode> left)
                     {
-                        left_ = std::make_shared<ArrNode>(left);
+                        left_ = left;
                     };
 
-                    void SetForwardLink(ArrNode& right)
+                    void SetForwardLink(std::shared_ptr<ArrNode> right)
                     {
-                        right_ = std::make_shared<ArrNode>(right);
+                        right_ = right;
                     };
 
                     std::shared_ptr<ArrNode> GetLink(bool forward = true)
@@ -100,12 +100,10 @@ namespace changeable_array
         public:
             Array(int x, int y) : first_(x, y), last_(0, 0)
             {
-                //ArrNode first_(x, y);
-                //ArrNode last_;
-                ArrNode& first = first_;
-                ArrNode& last = last_;
-                first_.SetForwardLink(last);
-                last_.SetBackLink(first);
+                std::shared_ptr<ArrNode> first {std::make_shared<ArrNode> (first_)};
+                std::shared_ptr<ArrNode> last {std::make_shared<ArrNode> (last_)};
+                first->SetForwardLink(last);
+                last->SetBackLink(first);
             };
 
             void PushBack(int, int);

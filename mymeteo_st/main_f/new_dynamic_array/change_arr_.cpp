@@ -5,39 +5,50 @@
 using namespace changeable_array;
 
 void Array::PushBack(int x, int y)
-{
-    ArrNode& first = first_;
-    ArrNode& last = last_;
-    first.SetForwardLink(last);
-    last.SetForwardLink(first); 
+{   
+    
     if ((0 == last_.GetCoord_(true)) && (0 == last_.GetCoord_(false))) {
-        last_.SetCoord(x, y);       
+        last_.SetCoord(x, y);     
+        #ifdef DEBUG_PUSHBACK
+            std::cout << "---PUSHBACK---" << "\n";
+            std::cout << "Creating last - x is: " << last_.GetCoord_(true) << " y is: " << last_.GetCoord_(false) << "\n";
+        #endif  
     } else { 
         ArrNode tmp;
-        ArrNode& ref_tmp = tmp;
-        std::shared_ptr<ArrNode> tmp_{std::make_shared<ArrNode> (ref_tmp)};
-        ref_tmp.SetBackLink(first_);
-        #ifdef DEBUG
-            std::cout << "FIRST FROM TMP: " << (ref_tmp.GetLink(false))->GetCoord_(true) << " " << (ref_tmp.GetLink(false))->GetCoord_(false) << std::endl;
+        std::shared_ptr<ArrNode> p_tmp {std::make_shared<ArrNode> (tmp)};
+        std::shared_ptr<ArrNode> last {std::make_shared<ArrNode> (last_)};
+        std::shared_ptr<ArrNode> first{std::make_shared<ArrNode>(first_)};
+        //first->SetForwardLink(last);
+        //last->SetBackLink(first);
+        std::shared_ptr<ArrNode> middle = last->GetLink(false);
+        #ifdef DEBUG_PUSHBACK
+            std::cout << "Middle is - x: " << middle->GetCoord_(true) << " y: " << middle->GetCoord_(false) << "\n";
+            std::cout << "Last from first is - x: " << (first->GetLink())->GetCoord_(true) << " y: " << (first->GetLink())->GetCoord_(false) << "\n";
+            std::cout << "Last is - x: " << last->GetCoord_(true) << " y: " << last->GetCoord_(false) << "\n";
         #endif
-        ref_tmp.SetForwardLink(last);
-        #ifdef DEBUG
-            std::cout << "LAST FROM TMP: " << (ref_tmp.GetLink())->GetCoord_(true) << " " << (ref_tmp.GetLink())->GetCoord_(false) << std::endl;
-            std::cout << "FIRST FROM TMP: " << (ref_tmp.GetLink(false))->GetCoord_(true) << " " << (ref_tmp.GetLink(false))->GetCoord_(false) << std::endl;
+        middle->SetForwardLink(p_tmp);
+        last->SetBackLink(p_tmp);
+        p_tmp->SetBackLink(middle);
+        p_tmp->SetForwardLink(last);
+        p_tmp->SetCoord(last->GetCoord_(true), last->GetCoord_(false));
+        last->SetCoord(x, y);
+        #ifdef DEBUG_PUSHBACK            
+            std::cout << "FIRST FROM TMP: " << (p_tmp->GetLink(false))->GetCoord_(true) << " " << (p_tmp->GetLink(false))->GetCoord_(false) << std::endl;
         #endif
-        ref_tmp.SetCoord(last_.GetCoord_(true), last_.GetCoord_(false));
-        last_.GetLink(false)->SetForwardLink(ref_tmp);
-        #ifdef DEBUG
-            std::cout << "AFTER LINKING NEXT BY 1ST IS: " << (first_.GetLink())->GetCoord_(true) << " " << (first_.GetLink())->GetCoord_(false) << std::endl;
+        #ifdef DEBUG_PUSHBACK
+            std::cout << "AFTER LINKING TMP IS: " << p_tmp->GetCoord_(true) << " " << p_tmp->GetCoord_(false) << std::endl;
+            std::cout << "AFTER LINKING LAST FROM TMP: " << (p_tmp->GetLink())->GetCoord_(true) << " " << (p_tmp->GetLink())->GetCoord_(false) << std::endl;
+            std::cout << "AFTER LINKING FIRST FROM TMP: " << (p_tmp->GetLink(false))->GetCoord_(true) << " " << (p_tmp->GetLink(false))->GetCoord_(false) << std::endl;
+            std::cout << "AFTER LINKING NEXT BY 1ST IS: " << (first->GetLink())->GetCoord_(true) << " " << (first->GetLink())->GetCoord_(false) << std::endl;
         #endif
-        last_.SetBackLink(ref_tmp);
-        last_.SetCoord(x, y);  
-        ref_tmp.SetForwardLink(last);
-        #ifdef DEBUG
+        #ifdef DEBUG_PUSHBACK
             std::cout << "AFTER INIT STRAIGHT LAST IS: " << last_.GetCoord_(true) << " " << last_.GetCoord_(false) << std::endl;
             std::cout << "AFTER INIT MIDDLE FROM LAST IS: " << (last_.GetLink(false))->GetCoord_(true) << " " << (last_.GetLink(false))->GetCoord_(false) << std::endl; 
-            std::cout << "AFTER LINKING AND INIT LAST FROM TMP IS: " << (ref_tmp.GetLink())->GetCoord_(true) << " " << (ref_tmp.GetLink())->GetCoord_(false) << std::endl;
-        #endif  
+            std::cout << "AFTER LINKING AND INIT LAST FROM TMP IS: " << (p_tmp->GetLink())->GetCoord_(true) << " " << (p_tmp->GetLink())->GetCoord_(false) << std::endl;
+            std::cout << "FROM F->MIDDLE LAST_ IS: " << ((first_.GetLink())->GetLink())->GetCoord_(true) << "\n";
+            std::cout << "---END OF PUSHBACK---" << "\n\n";
+        #endif 
+
     }
 }
 
