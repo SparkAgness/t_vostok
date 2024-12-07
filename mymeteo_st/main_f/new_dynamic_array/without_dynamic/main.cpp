@@ -23,4 +23,10 @@ int main()
     std::cout << tmp.GetIndexCoord(true, 1) << " " << tmp.GetIndexCoord(false, 1) << "\n";
     std::cout << tmp.GetIndexCoord(true, 2) << " " << tmp.GetIndexCoord(false, 2) << "\n";
     std::cout << tmp.GetIndexCoord(true, 3) << " " << tmp.GetIndexCoord(false, 3) << "\n";
+    tmp.DeleteByIndex(23);
+    std::cout << tmp.GetIndexCoord(true, 0) << " " << tmp.GetIndexCoord(false, 0) << "\n";
+    std::cout << tmp.GetIndexCoord(true, 1) << " " << tmp.GetIndexCoord(false, 1) << "\n";
+    std::cout << tmp.GetIndexCoord(true, 2) << " " << tmp.GetIndexCoord(false, 2) << "\n";
+    std::cout << tmp.MinMax(true, true) << " " << tmp.MinMax(true, false) << "\n";
+    std::cout << tmp.MinMax(false, true) << " " << tmp.MinMax(false, false) << "\n";
 }

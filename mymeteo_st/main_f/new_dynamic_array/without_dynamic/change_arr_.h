@@ -67,6 +67,10 @@ namespace changeable_array
 	    std::shared_ptr<ArrNode> first_;
         std::shared_ptr<ArrNode> last_;
 
+        void Delete(std::shared_ptr<ArrNode>);
+        std::shared_ptr<ArrNode> Moving(int);
+
+
         public:
             Array(int x, int y) : first_(new ArrNode), last_(new ArrNode)
             {
@@ -80,9 +84,15 @@ namespace changeable_array
             int GetFirstCoord(bool) const;
             int GetLastCoord(bool) const;
             int GetIndexCoord(bool, int) const;
-            int GetSecondCoord(bool);
-            void Test();
-            void BackTest();
+            void DeleteFirst();
+            void DeleteLast();
+            void DeleteByIndex(int);
+
+            int GetSecondCoord(bool); //for testing
+            void DeleteSecond(); //for testing
+            void Test(); //for testing
+            void BackTest(); //for testing
+            std::shared_ptr<ArrNode> MinMax(bool, bool);
     };
 
 
